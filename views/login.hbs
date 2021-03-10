@@ -1,17 +1,19 @@
-<form action="/admin/auth/login" method="POST">
-{{#if error}}
-    <div class="alert alert-danger" role="alert">
-        الايميل او كلمة المرور خطأ
+<div class="login">
+  <form action="/admin/auth/login" method="POST" class="login-form">
+  {{#if error}}
+      <div class="alert alert-danger" role="alert">
+          الايميل او كلمة المرور خطأ
+      </div>
+  {{/if}}
+    <div class="mb-3">
+      <label for="admin_email" class="form-label">الايميل</label>
+      <input type="email" class="form-control" id="admin_email" aria-describedby="emailHelp" name="email" required>
     </div>
-{{/if}}
-  <div class="mb-3">
-    <label for="admin_email" class="form-label">الايميل</label>
-    <input type="email" class="form-control" id="admin_email" aria-describedby="emailHelp" name="email">
-  </div>
-  <div class="mb-3">
-    <label for="admin_password" class="form-label">كلمة المرور</label>
-    <input type="password" class="form-control" id="admin_password" name="password">
-  </div>
- 
-  <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
-</form>
+    <div class="mb-3">
+      <label for="admin_password" class="form-label">كلمة المرور</label>
+      <input type="password" class="form-control" id="admin_password" name="password" required>
+    </div>
+  
+    <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+  </form>
+</div>

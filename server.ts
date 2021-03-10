@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import path from "path";
 import connection from "./config/db";
 import hbs from "express-handlebars";
 import {adminRouter} from "./routes/admin";
@@ -8,7 +9,8 @@ connection;
 
 app.engine('hbs', hbs({extname: '.hbs'}));
 app.set('view engine', 'hbs');
-app.use(express.static(`${__dirname}/public`));
+app.set('views', __dirname + '/views');
+app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
