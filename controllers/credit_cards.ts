@@ -1,5 +1,5 @@
 import express, {Request, Response, NextFunction} from "express";
-import {Connect} from "../config/db";
+import db from "../config/db";
 
 const addCreditCard = (req: Request, res: Response, next: NextFunction) =>{
     

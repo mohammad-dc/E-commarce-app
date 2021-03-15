@@ -15,4 +15,4 @@ app.use(express.json());
 
 app.use('/', adminRouter);
 
-app.listen(5000, () => console.log(`server is running at port 3000`))
+app.listen(4000, () => console.log(`server is running at port 4000`))

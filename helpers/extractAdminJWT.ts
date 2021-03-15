@@ -9,7 +9,7 @@ const extractAdminJWT = (req: Request, res: Response, next: NextFunction) =>{
         jwt.verify(token, config.server.token.adminSecretKey, (error, decoded) => {
             if (error) {
                 return res.status(404).json({
-                    message: 'لا يسمح لك بالدخول!!!',
+                    message: 'لا يسمح لك بالدخول, يرجى تسجيل الدخول مرة اخرى',
                     error
                 });
             } else {
@@ -19,7 +19,7 @@ const extractAdminJWT = (req: Request, res: Response, next: NextFunction) =>{
         });
     } else {
         return res.status(401).json({
-            message: 'لا يسمح لك بالدخول!!!'
+            message: 'لا يسمح لك بالدخول, يرجى تسجيل الدخول مرة اخرى'
         });
     }
 }
