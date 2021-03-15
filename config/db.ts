@@ -1,17 +1,38 @@
 import mysql from "mysql";
 import config from "./config";
 
-const connection = mysql.createConnection({
+const params = {
     host: config.mysql.host,
     user: config.mysql.user,
     password: config.mysql.password,
     database: config.mysql.database
-});
+};
 
-connection.connect((err: Error) => {
-    if(err)console.error(`database Error: ${err}`);
-    console.log('database connected!!!')
-});
+const Connect = async () =>
+    new Promise((resolve, reject) => {
+        const connection = mysql.createConnection(params);
 
-export default connection;
+        connection.connect((error: Error) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve(connection);
+        });
+    });
+
+const Query = async (connection: any, query: string) =>
+    new Promise((resolve, reject) => {
+        connection.query(query, connection, (error: Error, result: any) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve(result);
+        });
+    });
+
+export { Connect, Query };
 

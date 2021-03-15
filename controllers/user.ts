@@ -1,5 +1,5 @@
 import express, {Request, Response, NextFunction} from "express";
-import connectionDB from "../config/db";
+import {Connect} from "../config/db";
 
 const getAllUsers = (req: Request, res: Response, next: NextFunction) =>{
     
