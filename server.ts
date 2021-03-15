@@ -7,9 +7,8 @@ import {adminRouter} from "./routes/admin";
 const app = express();
 connection;
 
-app.engine('hbs', hbs({extname: '.hbs'}));
 app.set('view engine', 'hbs');
-app.set('views', __dirname + '/views');
+app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'main', layoutsDir: __dirname + '/views/layouts', partialsDir: __dirname + '/views/partial'}));
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
