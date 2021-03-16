@@ -232,4 +232,35 @@ const acceptDealer = (req: Request, res: Response, next: NextFunction) => {
     }
 
 }
-export default {registerDealer, loginDealer, updateDealer, retrieveDealer, deleteDealer, acceptDealer}
+
+const changePercentageSales = (req: Request, res: Response, next: NextFunction) =>{
+    let {percentage_sales} = req.body;
+    let {id} = req.params;
+
+    let query = `UPDATE dealer SET percentage_sales=${percentage_sales} WHERE ID=${id}`;
+    
+    try {
+        con.query(query, (error: Error, results: any, fields: any) => {
+            if(error){
+                return res.status(400).json({
+                    success: false,
+                    message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    error
+                });
+            } else if(results){
+               return res.status(200).json({
+                    success: true,
+                    message: 'تم تحديث النسبة',
+                });
+            }
+        })
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+            error
+        });
+    }
+};
+
+export default {registerDealer, loginDealer, updateDealer, retrieveDealer, deleteDealer, acceptDealer, changePercentageSales}
