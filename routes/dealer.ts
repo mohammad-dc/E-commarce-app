@@ -16,5 +16,6 @@ dealerRouter.get('/api/v1/user/dealer/get/:id', extractUserJWT, controller.retri
 
 // admin
 dealerRouter.delete('/api/v1/admin/dealer/delete/:id', extractAdminJWT, controller.deleteDealer);
+dealerRouter.get('/api/v1/admin/dealer/get/', extractAdminJWT, controller.getAllDealers);
 dealerRouter.put('/api/v1/admin/dealer/active/:id', extractAdminJWT, controller.acceptDealer);
 dealerRouter.put('/api/v1/admin/dealer/percentage/:id', extractAdminJWT, controller.changePercentageSales);

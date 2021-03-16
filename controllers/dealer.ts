@@ -5,11 +5,11 @@ import {sendSMS} from "../helpers/sendSMS";
 import {con} from "../config/db";
 
 const registerDealer = (req: Request, res: Response, next: NextFunction) => {
-    let {email, password, name, address, phone} = req.body;
+    let {email, password, name, type, address, phone} = req.body;
 
     let SSN_image = `kiwi${req.file.path.split('kiwi')[1]}`;
 
-    let query = `INSERT INTO dealer (email, password, name, address, phone, image, SSN_image, percentage_sales, is_accepted) VALUES ("${email}", "${password}", "${name}", "${address}", "${phone}", "No image", "${SSN_image}", 0, false)`;
+    let query = `INSERT INTO dealer (email, password, name, type, address, phone, image, SSN_image, percentage_sales, is_accepted) VALUES ("${email}", "${password}", "${name}", "${type}", "${address}", "${phone}", "No image", "${SSN_image}", 0, false)`;
 
     try {
         con.query(`SELECT ID FROM dealer WHERE email="${email}"`, (error: Error, results: any, fields: any) => {
@@ -137,7 +137,34 @@ const updateDealer = (req: Request, res: Response, next: NextFunction) => {
 const retrieveDealer = (req: Request, res: Response, next: NextFunction) => {
     let {id} = req.params;
 
-    let query = `SELECT ID, email, password, name, address, phone, image, percentage_sales FROM dealer WHERE ID=${id}`;
+    let query = `SELECT ID, email, password, name, type, address, phone, image, percentage_sales FROM dealer WHERE ID=${id}`;
+
+    try {
+        con.query(query, (error: Error, results: any, fields: any) => {
+            if(error){
+                return res.status(400).json({
+                    success: false,
+                    message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    error
+                });
+            } else if(results){
+               return res.status(200).json({
+                    success: true,
+                    results,
+                });
+            }
+        })
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+            error
+        });
+    }
+};
+
+const getAllDealers = (req: Request, res: Response, next: NextFunction) => {
+    let query = `SELECT ID, email, password, name, type, address, phone, image, percentage_sales FROM dealer`;
 
     try {
         con.query(query, (error: Error, results: any, fields: any) => {
@@ -263,4 +290,4 @@ const changePercentageSales = (req: Request, res: Response, next: NextFunction) 
     }
 };
 
-export default {registerDealer, loginDealer, updateDealer, retrieveDealer, deleteDealer, acceptDealer, changePercentageSales}
+export default {registerDealer, loginDealer, updateDealer, retrieveDealer, getAllDealers, deleteDealer, acceptDealer, changePercentageSales}
