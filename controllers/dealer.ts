@@ -137,7 +137,7 @@ const updateDealer = (req: Request, res: Response, next: NextFunction) => {
 const retrieveDealer = (req: Request, res: Response, next: NextFunction) => {
     let {id} = req.params;
 
-    let query = `SELECT ID, email, password, name, address, image, percentage_sales FROM dealer WHERE ID=${id}`;
+    let query = `SELECT ID, email, password, name, address, phone, image, percentage_sales FROM dealer WHERE ID=${id}`;
 
     try {
         con.query(query, (error: Error, results: any, fields: any) => {
