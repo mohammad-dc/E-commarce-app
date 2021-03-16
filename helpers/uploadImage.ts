@@ -17,4 +17,4 @@ const fileFilter = (req: any, file: any, cb: any) =>{
 export let upload = multer({
     storage,
     fileFilter,
-}).single('image');
+});

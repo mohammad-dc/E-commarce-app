@@ -17,6 +17,9 @@ const TOKEN_USER_SECRET_KEY = process.env.TOKEN_USER_SECRET_KEY || '$2y$12$RKeg2
 const TOKEN_ADMIN_ISSURE = process.env.TOKEN_ADMIN_ISSURE || '$2y$12$mObJxFNHvJMsqbSareX7iu9ca11HdIhKpobhFr/3V7smwzyusN4rK';
 const TOKEN_USER_ISSURE = process.env.TOKEN_USER_ISSURE || '$2y$12$tAYqrE8tS0W.XU8c8noW.egHUVMGy26Rz5w0.npJXvUtMyQCDwaeO';
 
+// Nexmo
+const NEXMO_SECRET_KEY = process.env.NEXMO_SECRET_KEY || '2c0k9yBKivOMdFvb';
+const NEXMO_PUBLIC_KEY = process.env.NEXMO_PUBLIC_KEY || 'ec497654';
 
 const server= { 
     port : PORT,
@@ -25,6 +28,10 @@ const server= {
         userSecretKey: TOKEN_USER_SECRET_KEY,
         adminIssureKey: TOKEN_ADMIN_ISSURE,
         userIssureKey: TOKEN_USER_ISSURE
+    },
+    nexmo: {
+        secretKey: NEXMO_SECRET_KEY,
+        publicKey: NEXMO_PUBLIC_KEY
     }
 };
 

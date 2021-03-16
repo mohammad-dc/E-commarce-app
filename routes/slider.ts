@@ -7,7 +7,7 @@ import {upload} from "../helpers/uploadImage";
 
 export const sliderRouter = express.Router();
 
-sliderRouter.post('/api/v1/admin/slider/add', extractAdminJWT, upload, extractRequest(SliderSchema), controller.addSliderImage);
-sliderRouter.put('/api/v1/admin/slider/update/:id', extractAdminJWT, upload, extractRequest(SliderSchema), controller.updateSliderImage);
+sliderRouter.post('/api/v1/admin/slider/add', extractAdminJWT, upload.single('image'), extractRequest(SliderSchema), controller.addSliderImage);
+sliderRouter.put('/api/v1/admin/slider/update/:id', extractAdminJWT,  upload.single('image'), extractRequest(SliderSchema), controller.updateSliderImage);
 sliderRouter.get('/api/v1/admin/slider/get', extractAdminJWT, extractRequest(SliderSchema), controller.getAllSliderImages);
 sliderRouter.delete('/api/v1/admin/slider/delete/:id', extractAdminJWT, extractRequest(SliderSchema), controller.deleteSliderImage);
