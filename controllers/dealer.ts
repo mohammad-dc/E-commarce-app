@@ -64,7 +64,7 @@ const loginDealer = (req: Request, res: Response, next: NextFunction) => {
                 })
             }
             if(results){
-                if(results.is_accepted){
+                if(results[0].is_accepted){
                     signUserJWT(results[0], (_error, token) =>{
                         if(_error){
                             return res.status(500).json({

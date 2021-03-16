@@ -4,6 +4,7 @@ import {adminRouter} from "./routes/admin";
 import {sliderRouter} from "./routes/slider";
 import {dealerRouter} from "./routes/dealer";
 import {userRouter} from "./routes/user";
+import {productRouter} from "./routes/product";
 import {TransitionRouter} from "./routes/transition";
 import {TransitionPricingRouter} from "./routes/transition_pricing";
 
@@ -14,11 +15,11 @@ app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
-
-app.use('/', adminRouter);
-app.use('/', sliderRouter);
-app.use('/', dealerRouter);
 app.use('/', userRouter);
+app.use('/', adminRouter);
+app.use('/', dealerRouter);
+app.use('/', sliderRouter);
+app.use('/', productRouter);
 app.use('/', TransitionRouter);
 app.use('/', TransitionPricingRouter);
 
