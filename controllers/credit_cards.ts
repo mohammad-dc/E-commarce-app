@@ -88,4 +88,33 @@ const getAllOwnerCreditCards = (req: Request, res: Response, next: NextFunction)
     }
 };
 
-export default {addCreditCard, deleteCreditCard, getAllOwnerCreditCards};
+const getAllTransitionCreditCards = (req: Request, res: Response, next: NextFunction) =>{
+    let {owner_type} = req.params;
+
+    let query = `SELECT ID, card_number, expired_time, security_code, zip_code FROM credit WHERE owner_type=${owner_type}`;
+
+    try {
+        con.query(query, (error: Error, results: any, fields: any) => {
+            if(error){
+                return res.status(400).json({
+                    success: false,
+                    message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    error
+                });
+            } else if(results){
+               return res.status(200).json({
+                    success: true,
+                    results,
+                });
+            }
+        })
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+            error
+        });
+    }
+};
+
+export default {addCreditCard, deleteCreditCard, getAllOwnerCreditCards, getAllTransitionCreditCards};
