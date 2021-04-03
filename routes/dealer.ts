@@ -14,7 +14,7 @@ dealerRouter.post('/api/v1/user/dealer/auth/login', extractRequest(dealerLoginSc
 dealerRouter.put('/api/v1/user/dealer/update/:id', extractRequest(dealerUpdateSchema), extractUserJWT, upload.single('image'), controller.updateDealer);
 dealerRouter.get('/api/v1/user/dealer/get/:id', extractUserJWT, controller.retrieveDealer);
 
-// admin
+// adminb 
 dealerRouter.delete('/api/v1/admin/dealer/delete/:id', extractAdminJWT, controller.deleteDealer);
 dealerRouter.get('/api/v1/admin/dealer/get/', extractAdminJWT, controller.getAllDealers);
 dealerRouter.put('/api/v1/admin/dealer/active/:id', extractAdminJWT, controller.acceptDealer);

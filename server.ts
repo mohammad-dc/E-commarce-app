@@ -1,4 +1,7 @@
 import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
 import connection from "./config/db";
 import {adminRouter} from "./routes/admin";
 import {sliderRouter} from "./routes/slider";
@@ -11,6 +14,27 @@ import {TransitionRouter} from "./routes/transition";
 import {TransitionPricingRouter} from "./routes/transition_pricing";
 
 const app = express();
+
+app.use(cors());
+app.use(helmet());
+app.use(morgan('tiny'));
+
+let http = require('http').Server(app);
+let io = require('socket.io')(http);
+
+io.on("connection", function(socket: any) {
+  console.log("a user connected");
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  socket.on('chat message', (msg: string) => {
+    console.log('message: ' + msg);
+  });
+
+});
+
 connection;
 
 app.use('/uploads', express.static('uploads'));
@@ -27,4 +51,4 @@ app.use('/', productRouter);
 app.use('/', TransitionRouter);
 app.use('/', TransitionPricingRouter);
 
-app.listen(4000, () => console.log(`server is running at port 4000`))
+http.listen(4000, () => console.log(`server is running at port 4000`))

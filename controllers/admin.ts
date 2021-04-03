@@ -1,10 +1,14 @@
 import express, {Request, Response, NextFunction} from "express";
 import {con} from "../config/db";
 import signAdminJWT from "../helpers/signAdminJWT";
+import Cookies from 'universal-cookie';
 
 const login = (req: Request, res: Response, next: NextFunction) =>{
+    console.log(req.body);
     let {email, password} = req.body;
     let query = `SELECT ID, email, password FROM admin WHERE email='${email}' AND password='${password}'`;
+
+    let cookies  = new Cookies();
 
     con.query(query, (error:Error, results: any, fields: any) =>{
         if(error) {
@@ -22,6 +26,13 @@ const login = (req: Request, res: Response, next: NextFunction) =>{
                     error: _error
                 })
             } else if(token){
+                cookies.set('token', token, {
+                    expires: new Date(0),
+                    path: '/',
+                    domain: 'http://localhost:5500',
+                    httpOnly : false,
+                    secure: false
+                })
                 return res.status(200).json({
                     success: true,
                     message: 'تم تسجيل الدخول بنجاح',
