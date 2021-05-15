@@ -44,11 +44,11 @@ const login = (req: Request, res: Response, next: NextFunction) => {
 
 const updateAdmin = (req: Request, res: Response, next: NextFunction) => {
   let { email, password } = req.body;
-  let { id } = req.params;
 
-  let query = `UPDATE admin SET email="${email}", password="${password}" WHERE ID=${id}`;
+  let query = `UPDATE admin SET email="${email}", password="${password}"`;
 
   con.query(query, (error: Error, results: any, fields: any) => {
+    let admin = { email, password };
     if (error) {
       return res.status(400).json({
         success: false,
@@ -56,9 +56,20 @@ const updateAdmin = (req: Request, res: Response, next: NextFunction) => {
         error: error,
       });
     } else if (results) {
-      return res.status(200).json({
-        success: true,
-        message: "تم التعديل بنجاح",
+      signAdminJWT(admin, (_error, token) => {
+        if (_error) {
+          return res.status(500).json({
+            success: false,
+            message: "الايميل او كلمة السر خطأ",
+            error: _error,
+          });
+        } else if (token) {
+          return res.status(200).json({
+            success: true,
+            message: "تم التعديل بنجاح",
+            token,
+          });
+        }
       });
     }
   });
