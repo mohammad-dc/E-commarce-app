@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import config from "./config/config";
 import connection from "./config/db";
 import { chatRouter } from "./routes/chat";
 import { adminRouter } from "./routes/admin";
@@ -54,4 +55,6 @@ app.use("/", productRouter);
 app.use("/", TransitionRouter);
 app.use("/", TransitionPricingRouter);
 
-http.listen(4000, () => console.log(`server is running at port 4000`));
+http.listen(config.server.port, () =>
+  console.log(`server is running at port 4000`)
+);

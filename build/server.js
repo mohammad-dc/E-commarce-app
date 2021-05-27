@@ -7,6 +7,7 @@ var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
 var helmet_1 = __importDefault(require("helmet"));
 var morgan_1 = __importDefault(require("morgan"));
+var config_1 = __importDefault(require("./config/config"));
 var db_1 = __importDefault(require("./config/db"));
 var chat_1 = require("./routes/chat");
 var admin_1 = require("./routes/admin");
@@ -49,4 +50,6 @@ app.use("/", credit_card_1.creditRouter);
 app.use("/", product_1.productRouter);
 app.use("/", transition_1.TransitionRouter);
 app.use("/", transition_pricing_1.TransitionPricingRouter);
-http.listen(4000, function () { return console.log("server is running at port 4000"); });
+http.listen(config_1.default.server.port, function () {
+    return console.log("server is running at port 4000");
+});
