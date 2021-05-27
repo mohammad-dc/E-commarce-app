@@ -15,8 +15,8 @@ export const dealerRouter = express.Router();
 //dealer
 dealerRouter.post(
   "/api/v1/user/dealer/auth/register",
-  extractRequest(dealerSignupSchema),
   upload.single("SSN_image"),
+  extractRequest(dealerSignupSchema),
   controller.registerDealer
 );
 dealerRouter.post(
@@ -26,8 +26,8 @@ dealerRouter.post(
 );
 dealerRouter.put(
   "/api/v1/user/dealer/update/:id",
-  extractRequest(dealerUpdateSchema),
   extractUserJWT,
+  extractRequest(dealerUpdateSchema),
   upload.single("image"),
   controller.updateDealer
 );

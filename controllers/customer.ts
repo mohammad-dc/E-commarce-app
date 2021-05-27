@@ -6,11 +6,11 @@ import { con } from "../config/db";
 const registerUser = (req: Request, res: Response, next: NextFunction) => {
   let { email, password, name, address, phone } = req.body;
 
-  let query = `INSERT INTO user_cutstomer (email, password, name, address, phone, image) VALUES ("${email}", "${password}", "${name}", "${address}", "${phone}", "No image")`;
+  let query = `INSERT INTO customer (email, password, name, address, phone, image) VALUES ("${email}", "${password}", "${name}", "${address}", "${phone}", "No image")`;
 
   try {
     con.query(
-      `SELECT ID FROM user_cutstomer WHERE email="${email}"`,
+      `SELECT ID FROM customer WHERE email="${email}"`,
       (error: Error, results: any, fields: any) => {
         if (error) {
           console.log(error);
@@ -51,7 +51,7 @@ const registerUser = (req: Request, res: Response, next: NextFunction) => {
 const loginUser = (req: Request, res: Response, next: NextFunction) => {
   let { email, password } = req.body;
 
-  let query = `SELECT ID FROM user_cutstomer WHERE email="${email}" AND password="${password}"`;
+  let query = `SELECT ID FROM customer WHERE email="${email}" AND password="${password}"`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -90,7 +90,7 @@ const loginUser = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
-  let query = `SELECT ID, email, password, name, address, phone, image FROM user_cutstomer`;
+  let query = `SELECT ID, email, password, name, address, phone, image FROM customer`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -121,7 +121,7 @@ const updateUser = (req: Request, res: Response, next: NextFunction) => {
   let image = `kiwi${req.file.path.split("kiwi")[1]}`;
   let { id } = req.params;
 
-  let query = `UPDATE user_cutstomer SET email="${email}", password="${password}", name="${name}", address="${address}", phone="${phone}", image="${image}" WHERE ID=${id}`;
+  let query = `UPDATE customer SET email="${email}", password="${password}", name="${name}", address="${address}", phone="${phone}", image="${image}" WHERE ID=${id}`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -155,7 +155,7 @@ const updateUser = (req: Request, res: Response, next: NextFunction) => {
 const retrieveUser = (req: Request, res: Response, next: NextFunction) => {
   let { id } = req.params;
 
-  let query = `SELECT ID, email, password, name, address, phone, image FROM user_cutstomer WHERE ID=${id}`;
+  let query = `SELECT ID, email, password, name, address, phone, image FROM customer WHERE ID=${id}`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -184,8 +184,8 @@ const retrieveUser = (req: Request, res: Response, next: NextFunction) => {
 const deleteUser = (req: Request, res: Response, next: NextFunction) => {
   let { id } = req.params;
 
-  let query = `DELETE FROM user_cutstomer WHERE ID=${id}`;
-  let query_image = `SELECT image FROM user_cutstomer WHERE ID=${id}`;
+  let query = `DELETE FROM customer WHERE ID=${id}`;
+  let query_image = `SELECT image FROM customer WHERE ID=${id}`;
 
   try {
     con.query(query_image, (error: Error, results: any) => {

@@ -3,7 +3,9 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import connection from "./config/db";
+import { chatRouter } from "./routes/chat";
 import { adminRouter } from "./routes/admin";
+import { orderRouter } from "./routes/order";
 import { sliderRouter } from "./routes/slider";
 import { dealerRouter } from "./routes/dealer";
 import { userRouter } from "./routes/user";
@@ -19,11 +21,11 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan("tiny"));
 
-let http = require("http").Server(app);
+let http = require("http").createServer(app);
 let io = require("socket.io")(http);
 
 io.on("connection", function (socket: any) {
-  console.log("a user connected");
+  console.log("user connected", socket.id);
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
@@ -40,6 +42,8 @@ app.use("/uploads", express.static("uploads"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.use("/", chatRouter);
+app.use("/", orderRouter);
 app.use("/", userRouter);
 app.use("/", adminRouter);
 app.use("/", dealerRouter);
