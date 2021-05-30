@@ -10,7 +10,7 @@ const addProduct = (req: Request, res: Response, next: NextFunction) => {
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -23,7 +23,7 @@ const addProduct = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -36,22 +36,28 @@ const updateProducts = (req: Request, res: Response, next: NextFunction) => {
   let image = `kiwi${req.file.path.split("kiwi")[1]}`;
   let { id } = req.params;
 
+  let query_image = `SELECT image FROM product WHERE ID=${id}`;
   let query = `UPDATE product SET name="${name}", image="${image}", price=${price}, description="${description}" WHERE ID=${id}`;
 
   try {
+    if (req.file) {
+      con.query(query_image, (error: Error, results: any, fields: any) => {
+        if (error) throw error;
+        if (results[0].image !== "No image") {
+          fs.unlink(`uploads/${results[0].image}`, (error) => {
+            if (error) throw error;
+          });
+        }
+      });
+    }
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
         });
       } else if (results) {
-        if (results.imgae !== "No image") {
-          fs.unlink(`uploads/${results.image}`, (error) => {
-            if (error) throw error;
-          });
-        }
         return res.status(200).json({
           success: true,
           message: "تم تعديل المنتج بنجاح",
@@ -59,7 +65,7 @@ const updateProducts = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -88,7 +94,7 @@ const deleteProduct = (req: Request, res: Response, next: NextFunction) => {
       }
       con.query(query, (error: Error, results: any, fields: any) => {
         if (error) {
-          return res.status(400).json({
+          return res.status(500).json({
             success: false,
             message: "حدث خطأ ما, يرجى المحاولة لاحقا",
             error,
@@ -102,7 +108,7 @@ const deleteProduct = (req: Request, res: Response, next: NextFunction) => {
       });
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -116,7 +122,7 @@ const getAllProducts = (req: Request, res: Response, next: NextFunction) => {
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -129,7 +135,7 @@ const getAllProducts = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -149,7 +155,7 @@ const getAllDealerProducts = (
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -162,7 +168,7 @@ const getAllDealerProducts = (
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -178,7 +184,7 @@ const searchProduct = (req: Request, res: Response, next: NextFunction) => {
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -191,13 +197,14 @@ const searchProduct = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
     });
   }
 };
+
 export default {
   addProduct,
   updateProducts,

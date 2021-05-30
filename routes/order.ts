@@ -3,26 +3,31 @@ import controller from "../controllers/order";
 import extractAdminJWT from "../helpers/extractAdminJWT";
 import extractUserJWT from "../helpers/extractUserJWT";
 import { extractRequest } from "../helpers/extractRequest";
-import { ProductAddSchema, ProductUpdateSchema } from "../validations/product";
-import { upload } from "../helpers/uploadImage";
+import { orderSchema } from "../validations/order";
 
 export const orderRouter = express.Router();
 
 //user
 orderRouter.post(
-  "/api/v1/user/order/create",
+  "/api/v1/user/customer/order/create",
   extractUserJWT,
+  extractRequest(orderSchema),
   controller.addOrder
 );
 orderRouter.put(
-  "/api/v1/user/order/cancel/:order_id",
+  "/api/v1/user/customer/order/cancel/:order_id",
   extractUserJWT,
   controller.cancelOrder
 );
 orderRouter.get(
-  "/api/v1/user/order/get/:customer_id",
+  "/api/v1/user/customer/order/get/:customer_id/:month",
   extractUserJWT,
   controller.getUserOrders
+);
+orderRouter.get(
+  "/api/v1/user/dealer/order/get/:dealer_id/:month",
+  extractUserJWT,
+  controller.getDealerOrders
 );
 orderRouter.get(
   "/api/v1/user/order/status/get",

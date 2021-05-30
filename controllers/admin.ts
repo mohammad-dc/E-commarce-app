@@ -50,7 +50,7 @@ const updateAdmin = (req: Request, res: Response, next: NextFunction) => {
   con.query(query, (error: Error, results: any, fields: any) => {
     let admin = { email, password };
     if (error) {
-      return res.status(400).json({
+      return res.status(500).json({
         success: false,
         message: "حدث خطأ, يرجى المحاولة فيما بعد",
         error: error,
@@ -58,7 +58,7 @@ const updateAdmin = (req: Request, res: Response, next: NextFunction) => {
     } else if (results) {
       signAdminJWT(admin, (_error, token) => {
         if (_error) {
-          return res.status(500).json({
+          return res.status(400).json({
             success: false,
             message: "الايميل او كلمة السر خطأ",
             error: _error,
@@ -75,6 +75,4 @@ const updateAdmin = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-const acceptDealer = (req: Request, res: Response, next: NextFunction) => {};
-
-export default { login, updateAdmin, acceptDealer };
+export default { login, updateAdmin };

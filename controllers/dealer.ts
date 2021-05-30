@@ -26,7 +26,7 @@ const registerDealer = (req: Request, res: Response, next: NextFunction) => {
           } else {
             con.query(query, (error: Error, results: any, fields: any) => {
               if (error) {
-                return res.status(400).json({
+                return res.status(500).json({
                   success: false,
                   message: "حدث خطأ ما, يرجى المحاولة لاحقا",
                   error,
@@ -35,7 +35,7 @@ const registerDealer = (req: Request, res: Response, next: NextFunction) => {
                 return res.status(201).json({
                   success: true,
                   message:
-                    "شكرا لك سيدي, سيتم التأكيد عليه من خلال رسالة ستصلك على هاتفك خلال يوم او اكثر",
+                    "شكرا لك سيدي, سيتم التواصل معك في حال تم تأكيد الحساب",
                 });
               }
             });
@@ -105,22 +105,28 @@ const updateDealer = (req: Request, res: Response, next: NextFunction) => {
   let image = `kiwi${req.file.path.split("kiwi")[1]}`;
   let { id } = req.params;
 
+  let query_image = `SELECT image FROM dealer WHERE ID=${id}`;
   let query = `UPDATE dealer SET email="${email}", password="${password}", name="${name}", address="${address}", phone="${phone}", image="${image}" WHERE ID=${id}`;
 
   try {
+    if (req.file) {
+      con.query(query_image, (error: Error, results: any, fields: any) => {
+        if (error) throw error;
+        if (results[0].image !== "No image") {
+          fs.unlink(`uploads/${results[0].image}`, (error) => {
+            if (error) throw error;
+          });
+        }
+      });
+    }
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
         });
       } else if (results) {
-        if (results.imgae !== "No image") {
-          fs.unlink(`uploads/${results.image}`, (error) => {
-            if (error) throw error;
-          });
-        }
         return res.status(200).json({
           success: true,
           message: "تم التعديل بنجاح",
@@ -128,7 +134,7 @@ const updateDealer = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -144,7 +150,7 @@ const retrieveDealer = (req: Request, res: Response, next: NextFunction) => {
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -157,7 +163,7 @@ const retrieveDealer = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -175,7 +181,7 @@ const getAllDealers = (req: Request, res: Response, next: NextFunction) => {
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -188,7 +194,7 @@ const getAllDealers = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -205,7 +211,7 @@ const deleteDealer = (req: Request, res: Response, next: NextFunction) => {
   try {
     con.query(query_image, (error: Error, results: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -223,7 +229,7 @@ const deleteDealer = (req: Request, res: Response, next: NextFunction) => {
     });
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -236,7 +242,7 @@ const deleteDealer = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -252,7 +258,7 @@ const acceptDealer = (req: Request, res: Response, next: NextFunction) => {
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -276,7 +282,7 @@ const acceptDealer = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -297,7 +303,7 @@ const changePercentageSales = (
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -310,7 +316,7 @@ const changePercentageSales = (
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,

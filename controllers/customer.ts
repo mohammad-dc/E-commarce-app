@@ -23,7 +23,7 @@ const registerUser = (req: Request, res: Response, next: NextFunction) => {
           } else {
             con.query(query, (error: Error, results: any, fields: any) => {
               if (error) {
-                return res.status(400).json({
+                return res.status(500).json({
                   success: false,
                   message: "حدث خطأ ما, يرجى المحاولة لاحقا",
                   error,
@@ -65,7 +65,7 @@ const loginUser = (req: Request, res: Response, next: NextFunction) => {
       if (results) {
         signUserJWT(results[0], (_error, token) => {
           if (_error) {
-            return res.status(500).json({
+            return res.status(400).json({
               success: false,
               message: "الايميل او كلمة السر خطأ",
               error: _error,
@@ -81,7 +81,7 @@ const loginUser = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -95,7 +95,7 @@ const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -108,7 +108,7 @@ const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -121,22 +121,30 @@ const updateUser = (req: Request, res: Response, next: NextFunction) => {
   let image = `kiwi${req.file.path.split("kiwi")[1]}`;
   let { id } = req.params;
 
-  let query = `UPDATE customer SET email="${email}", password="${password}", name="${name}", address="${address}", phone="${phone}", image="${image}" WHERE ID=${id}`;
+  let query_select = `SELECT image FROM customer WHERE ID=${id}`;
+  let query = `UPDATE customer SET email="${email}", password="${password}", name="${name}", address="${address}", phone="${phone}" ${
+    req.file ? `, image="${image}"` : ""
+  } WHERE ID=${id}`;
 
   try {
+    if (req.file) {
+      con.query(query_select, (error: Error, results: any, fields: any) => {
+        if (error) throw error;
+        if (results[0].image !== "No image") {
+          fs.unlink(`uploads/${results[0].image}`, (error) => {
+            if (error) throw error;
+          });
+        }
+      });
+    }
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
         });
       } else if (results) {
-        if (results.imgae !== "No image") {
-          fs.unlink(`uploads/${results.image}`, (error) => {
-            if (error) throw error;
-          });
-        }
         return res.status(200).json({
           success: true,
           message: "تم التعديل بنجاح",
@@ -144,7 +152,7 @@ const updateUser = (req: Request, res: Response, next: NextFunction) => {
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -160,7 +168,7 @@ const retrieveUser = (req: Request, res: Response, next: NextFunction) => {
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,
@@ -168,12 +176,12 @@ const retrieveUser = (req: Request, res: Response, next: NextFunction) => {
       } else if (results) {
         return res.status(200).json({
           success: true,
-          results,
+          results: results[0],
         });
       }
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
       error,
@@ -186,26 +194,20 @@ const deleteUser = (req: Request, res: Response, next: NextFunction) => {
 
   let query = `DELETE FROM customer WHERE ID=${id}`;
   let query_image = `SELECT image FROM customer WHERE ID=${id}`;
-
   try {
-    con.query(query_image, (error: Error, results: any) => {
-      if (error) {
-        return res.status(400).json({
-          success: false,
-          message: "حدث خطأ ما, يرجى المحاولة لاحقا",
-          error,
-        });
-      } else if (results) {
+    if (req.file) {
+      con.query(query_image, (error: Error, results: any, fields: any) => {
+        if (error) throw error;
         if (results[0].image !== "No image") {
-          fs.unlink(`uploads/${results.image}`, (error) => {
+          fs.unlink(`uploads/${results[0].image}`, (error) => {
             if (error) throw error;
           });
         }
-      }
-    });
+      });
+    }
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
-        return res.status(400).json({
+        return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة لاحقا",
           error,

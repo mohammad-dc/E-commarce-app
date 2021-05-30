@@ -3,20 +3,23 @@ import { con } from "../config/db";
 import Stripe from "../helpers/stripe";
 
 const addOrder = (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.body);
   let {
     payment_method,
     product_id,
     customer_id,
+    cart_id,
     quantity,
     total_price,
     address,
     number,
+    name,
     exp_month,
     exp_year,
     cvc,
   } = req.body;
+
   let query = `INSERT INTO orders(product_id, customer_id, quantity, total_price, payment_method, status, transition_price, address) VALUES(${product_id}, ${customer_id}, ${quantity}, ${total_price}, ${payment_method}, 'قيد التوصيل', 12, '${address}')`;
+  let query_cart = `DELETE FROM cart WHERE ID=${cart_id}`;
 
   if (payment_method === 1) {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -33,7 +36,7 @@ const addOrder = (req: Request, res: Response, next: NextFunction) => {
     });
   } else if (payment_method === 2) {
     con.query(
-      `SELECT stripe_id, email, name FROM customer WHERE ID=${customer_id}`,
+      `SELECT stripe_id, email FROM customer WHERE ID=${customer_id}`,
       (error: Error, customer_results: any, fields: any) => {
         if (error) {
           return res.status(500).json({
@@ -41,7 +44,11 @@ const addOrder = (req: Request, res: Response, next: NextFunction) => {
             message: "حدث خطأ ما يرجى المحاولة لاحقا",
             error,
           });
-        } else if (customer_results.length === 1) {
+        } else if (
+          customer_results.length === 1 &&
+          customer_results[0].stripe_id
+        ) {
+          console.log("1");
           Stripe.createToken(
             number,
             exp_month,
@@ -60,24 +67,22 @@ const addOrder = (req: Request, res: Response, next: NextFunction) => {
                   customer_results[0].stripe_id,
                   token.id
                 );
-                con.query(
-                  `SELECT total_price FROM product WHERE ID=${product_id}`,
-                  async (error: Error, product_results: any, fields: any) => {
-                    await Stripe.chargeCustomer(
-                      (product_results[0].total_price * 1000).toString(),
-                      "usd",
-                      "buy for product",
-                      customer_results[0].stripe_id
-                    );
-                  }
+                Stripe.chargeCustomer(
+                  (total_price * 1000).toString(),
+                  "usd",
+                  "buy for product",
+                  customer_results[0].stripe_id
                 );
               }
             }
           );
-        } else if (customer_results.length === 0) {
+        } else if (
+          customer_results.length === 1 &&
+          !customer_results[0].stripe_id
+        ) {
           Stripe.createCustomer(
             customer_results[0].email,
-            customer_results[0].name,
+            name,
             (error, customer) => {
               if (error) {
                 return res.status(500).json({
@@ -86,6 +91,9 @@ const addOrder = (req: Request, res: Response, next: NextFunction) => {
                   error,
                 });
               }
+              con.query(
+                `UPDATE customer SET stripe_id='${customer.id}' WHERE ID=${customer_id}`
+              );
               Stripe.createToken(
                 number,
                 exp_month,
@@ -101,27 +109,26 @@ const addOrder = (req: Request, res: Response, next: NextFunction) => {
                   }
                   if (token) {
                     Stripe.addCardToCustomer(customer.id, token.id);
-                    con.query(
-                      `SELECT total_price FROM product WHERE ID=${product_id}`,
-                      async (
-                        error: Error,
-                        product_results: any,
-                        fields: any
-                      ) => {
-                        await Stripe.chargeCustomer(
-                          (product_results[0].total_price * 1000).toString(),
-                          "usd",
-                          "buy for product",
-                          customer.id
-                        );
-                      }
+                    Stripe.chargeCustomer(
+                      (total_price * 1000).toString(),
+                      "usd",
+                      "buy for product",
+                      customer.id
                     );
                   }
                 }
               );
             }
           );
-          con.query(query, (error: Error, results: any, fields: any) => {
+        }
+        con.query(query, (error: Error, results: any, fields: any) => {
+          if (error) {
+            return res.status(500).json({
+              success: false,
+              message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+            });
+          }
+          con.query(query_cart, (error: Error, results: any, fields: any) => {
             if (error) {
               return res.status(500).json({
                 success: false,
@@ -133,7 +140,7 @@ const addOrder = (req: Request, res: Response, next: NextFunction) => {
               message: "تمت عملية الشراء",
             });
           });
-        }
+        });
       }
     );
   }
@@ -180,7 +187,32 @@ const getAllOrders = (req: Request, res: Response, next: NextFunction) => {
 
 const getUserOrders = (req: Request, res: Response, next: NextFunction) => {
   let { customer_id } = req.params;
-  let query = `SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID INNER JOIN customer AS c on o.customer_id=c.ID WHERE c.ID=${customer_id}`;
+  let { month } = req.params;
+
+  let query = `SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID INNER JOIN customer AS c on o.customer_id=c.ID WHERE c.ID=${customer_id} ${
+    month === "all" ? "" : `AND month(created_at)=${month}`
+  }`;
+
+  con.query(query, (error: Error, results: any, field: any) => {
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      results,
+    });
+  });
+};
+
+const getDealerOrders = (req: Request, res: Response, next: NextFunction) => {
+  let { dealer_id } = req.params;
+  let { month } = req.params;
+  let query = `SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID WHERE o.dealer_id=${dealer_id} ${
+    month === "all" ? "" : `AND month(created_at)=${month}`
+  }`;
 
   con.query(query, (error: Error, results: any, field: any) => {
     if (error) {
@@ -482,6 +514,7 @@ export default {
   cancelOrder,
   getAllOrders,
   getUserOrders,
+  getDealerOrders,
   getOrdersStatus,
   getDealerOrdersStatus,
   getCustomerOrdersStatus,

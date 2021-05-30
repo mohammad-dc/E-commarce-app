@@ -73,11 +73,7 @@ const createToken = (
 
 const addCardToCustomer = (customer_id: string, source: string) => {
   //@ts-ignore
-  stripe.customers.createSource(
-    customer_id,
-    { source },
-    //@ts-ignore
-    (error: Error, card: any) => {
+  stripe.customers.createSource(customer_id,{ source },(error: Error, card: any) => {
       if (error) console.log(`retrieve customer error: ${error}`);
       if (card) return JSON.stringify(card, null, 2);
       else console.log("something went wrong");

@@ -10,7 +10,7 @@ export const TransitionPricingRouter = express.Router();
 //admin
 TransitionPricingRouter.post('/api/v1/admin/transition-pricing/add', extractAdminJWT, extractRequest(TransitionPricingSchema), controller.addTransitionPricing);
 TransitionPricingRouter.put('/api/v1/admin/transition-pricing/update/:id', extractAdminJWT, extractRequest(TransitionPricingSchema), controller.updateTransitionPricing);
-TransitionPricingRouter.get('/api/v1/admin/transition-pricing/get', extractAdminJWT, controller.getAllTransitionsPricing);
+TransitionPricingRouter.get('/api/v1/admin/transition-pricing/get',  controller.getAllTransitionsPricing);
 TransitionPricingRouter.delete('/api/v1/admin/transition-pricing/delete/:id', extractAdminJWT, controller.deleteTransitionPricing);
 
 //user

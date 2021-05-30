@@ -52,7 +52,7 @@ productRouter.post(
   extractUserJWT,
   controller.searchProduct
 );
-productRouter.put(
+productRouter.get(
   "/api/v1/user/customer/product/get",
   extractUserJWT,
   controller.getAllProducts
