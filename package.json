@@ -2,7 +2,7 @@
   "name": "Ecommarace-server",
   "version": "1.0.0",
   "description": "",
-  "main": "build/server.js",
+  "main": "server.ts",
   "scripts": {
     "start": "node ./build/server.js",
     "build": "rm -rf build/ && tsc",

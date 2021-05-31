@@ -38,5 +38,5 @@ app.use("/", TransitionRouter);
 app.use("/", TransitionPricingRouter);
 
 app.listen(config.server.port, () =>
-  console.log(`server is running at port 4000`)
+  console.log(`server is running at port ${config.server.port}`)
 );
