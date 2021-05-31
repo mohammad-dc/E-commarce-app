@@ -13,6 +13,11 @@ import { upload } from "../helpers/uploadImage";
 export const userRouter = express.Router();
 
 //user
+userRouter.get(
+  "/api/v1/user/customer/verify",
+  extractUserJWT,
+  controller.verifyLogin
+);
 userRouter.post(
   "/api/v1/user/customer/auth/register",
   extractRequest(userSignupSchema),

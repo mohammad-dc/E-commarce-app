@@ -13,6 +13,7 @@ var dealer_2 = require("../validations/dealer");
 var uploadImage_1 = require("../helpers/uploadImage");
 exports.dealerRouter = express_1.default.Router();
 //dealer
+exports.dealerRouter.get("/api/v1/user/dealer/verify", extractUserJWT_1.default, dealer_1.default.verifyLogin);
 exports.dealerRouter.post("/api/v1/user/dealer/auth/register", uploadImage_1.upload.single("SSN_image"), extractRequest_1.extractRequest(dealer_2.dealerSignupSchema), dealer_1.default.registerDealer);
 exports.dealerRouter.post("/api/v1/user/dealer/auth/login", extractRequest_1.extractRequest(dealer_2.dealerLoginSchema), dealer_1.default.loginDealer);
 exports.dealerRouter.put("/api/v1/user/dealer/update/:id", extractUserJWT_1.default, extractRequest_1.extractRequest(dealer_2.dealerUpdateSchema), uploadImage_1.upload.single("image"), dealer_1.default.updateDealer);

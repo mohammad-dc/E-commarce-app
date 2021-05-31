@@ -13,6 +13,11 @@ import { upload } from "../helpers/uploadImage";
 export const dealerRouter = express.Router();
 
 //dealer
+dealerRouter.get(
+  "/api/v1/user/dealer/verify",
+  extractUserJWT,
+  controller.verifyLogin
+);
 dealerRouter.post(
   "/api/v1/user/dealer/auth/register",
   upload.single("SSN_image"),

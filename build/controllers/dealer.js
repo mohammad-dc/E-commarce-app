@@ -4,9 +4,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
+var jwt_decode_1 = __importDefault(require("jwt-decode"));
 var signUserJWT_1 = __importDefault(require("../helpers/signUserJWT"));
 var sendSMS_1 = require("../helpers/sendSMS");
 var db_1 = require("../config/db");
+var verifyLogin = function (req, res, next) {
+    var _a;
+    var token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+    try {
+        if (token) {
+            var decodeToken = jwt_decode_1.default(token);
+            var query = "SELECT ID, email, password, name, type, address, phone, image, percentage_sales FROM dealer WHERE email='" + decodeToken.email + "'";
+            db_1.con.query(query, function (error, results, fields) {
+                if (error) {
+                    return res.status(500).json({
+                        success: false,
+                        message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    });
+                }
+                return res.status(200).json({ success: true, results: results[0] });
+            });
+        }
+    }
+    catch (error) {
+        return res
+            .status(500)
+            .json({ success: false, message: "حدث خطأ ما, يرجى المحاولة لاحقا" });
+    }
+};
 var registerDealer = function (req, res, next) {
     var _a = req.body, email = _a.email, password = _a.password, name = _a.name, type = _a.type, address = _a.address, phone = _a.phone;
     var SSN_image = "kiwi" + req.file.path.split("kiwi")[1];
@@ -53,7 +78,7 @@ var registerDealer = function (req, res, next) {
 };
 var loginDealer = function (req, res, next) {
     var _a = req.body, email = _a.email, password = _a.password;
-    var query = "SELECT ID, is_accepted FROM dealer WHERE email=\"" + email + "\" AND password=\"" + password + "\"";
+    var query = "SELECT ID, email, password, name, type, address, phone, image, percentage_sales, accepted FROM dealer WHERE email=\"" + email + "\" AND password=\"" + password + "\"";
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
@@ -64,7 +89,7 @@ var loginDealer = function (req, res, next) {
                 });
             }
             if (results) {
-                if (results[0].is_accepted) {
+                if (results[0].accepted) {
                     signUserJWT_1.default(results[0], function (_error, token) {
                         if (_error) {
                             return res.status(500).json({
@@ -77,6 +102,7 @@ var loginDealer = function (req, res, next) {
                             return res.status(200).json({
                                 success: true,
                                 message: "تم تسجيل الدخول بنجاح",
+                                dealer: results[0],
                                 token: token,
                             });
                         }
@@ -313,6 +339,7 @@ var changePercentageSales = function (req, res, next) {
     }
 };
 exports.default = {
+    verifyLogin: verifyLogin,
     registerDealer: registerDealer,
     loginDealer: loginDealer,
     updateDealer: updateDealer,

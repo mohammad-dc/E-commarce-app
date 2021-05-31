@@ -4,8 +4,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
+var jwt_decode_1 = __importDefault(require("jwt-decode"));
 var signUserJWT_1 = __importDefault(require("../helpers/signUserJWT"));
 var db_1 = require("../config/db");
+var verifyLogin = function (req, res, next) {
+    var _a;
+    var token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+    try {
+        if (token) {
+            var decodeToken = jwt_decode_1.default(token);
+            var query = "SELECT ID, email, password, name, address, phone, image FROM customer WHERE email='" + decodeToken.email + "'";
+            db_1.con.query(query, function (error, results, fields) {
+                if (error) {
+                    return res.status(500).json({
+                        success: false,
+                        message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    });
+                }
+                return res.status(200).json({ success: true, results: results[0] });
+            });
+        }
+    }
+    catch (error) {
+        return res
+            .status(500)
+            .json({ success: false, message: "حدث خطأ ما, يرجى المحاولة لاحقا" });
+    }
+};
 var registerUser = function (req, res, next) {
     var _a = req.body, email = _a.email, password = _a.password, name = _a.name, address = _a.address, phone = _a.phone;
     var query = "INSERT INTO customer (email, password, name, address, phone, image) VALUES (\"" + email + "\", \"" + password + "\", \"" + name + "\", \"" + address + "\", \"" + phone + "\", \"No image\")";
@@ -51,7 +76,7 @@ var registerUser = function (req, res, next) {
 };
 var loginUser = function (req, res, next) {
     var _a = req.body, email = _a.email, password = _a.password;
-    var query = "SELECT ID FROM customer WHERE email=\"" + email + "\" AND password=\"" + password + "\"";
+    var query = "SELECT ID, email, password, name, address, phone, image FROM customer WHERE email=\"" + email + "\" AND password=\"" + password + "\"";
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
@@ -74,6 +99,7 @@ var loginUser = function (req, res, next) {
                         return res.status(200).json({
                             success: true,
                             message: "تم تسجيل الدخول بنجاح",
+                            customer: results[0],
                             token: token,
                         });
                     }
@@ -229,6 +255,7 @@ var deleteUser = function (req, res, next) {
     }
 };
 exports.default = {
+    verifyLogin: verifyLogin,
     registerUser: registerUser,
     loginUser: loginUser,
     updateUser: updateUser,

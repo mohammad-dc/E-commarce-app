@@ -1,8 +1,32 @@
 import express, { Request, Response, NextFunction } from "express";
 import fs from "fs";
+import jwtDecode from "jwt-decode";
 import signUserJWT from "../helpers/signUserJWT";
 import { sendSMS } from "../helpers/sendSMS";
 import { con } from "../config/db";
+
+const verifyLogin = (req: Request, res: Response, next: NextFunction) => {
+  let token = req.headers.authorization?.split(" ")[1];
+  try {
+    if (token) {
+      const decodeToken = jwtDecode<{ email: string }>(token);
+      let query = `SELECT ID, email, password, name, type, address, phone, image, percentage_sales FROM dealer WHERE email='${decodeToken.email}'`;
+      con.query(query, (error: Error, results: any, fields: any) => {
+        if (error) {
+          return res.status(500).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+          });
+        }
+        return res.status(200).json({ success: true, results: results[0] });
+      });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "حدث خطأ ما, يرجى المحاولة لاحقا" });
+  }
+};
 
 const registerDealer = (req: Request, res: Response, next: NextFunction) => {
   let { email, password, name, type, address, phone } = req.body;
@@ -55,7 +79,7 @@ const registerDealer = (req: Request, res: Response, next: NextFunction) => {
 const loginDealer = (req: Request, res: Response, next: NextFunction) => {
   let { email, password } = req.body;
 
-  let query = `SELECT ID, is_accepted FROM dealer WHERE email="${email}" AND password="${password}"`;
+  let query = `SELECT ID, email, password, name, type, address, phone, image, percentage_sales, accepted FROM dealer WHERE email="${email}" AND password="${password}"`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -67,7 +91,7 @@ const loginDealer = (req: Request, res: Response, next: NextFunction) => {
         });
       }
       if (results) {
-        if (results[0].is_accepted) {
+        if (results[0].accepted) {
           signUserJWT(results[0], (_error, token) => {
             if (_error) {
               return res.status(500).json({
@@ -79,6 +103,7 @@ const loginDealer = (req: Request, res: Response, next: NextFunction) => {
               return res.status(200).json({
                 success: true,
                 message: "تم تسجيل الدخول بنجاح",
+                dealer: results[0],
                 token,
               });
             }
@@ -325,6 +350,7 @@ const changePercentageSales = (
 };
 
 export default {
+  verifyLogin,
   registerDealer,
   loginDealer,
   updateDealer,

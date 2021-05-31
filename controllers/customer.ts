@@ -1,7 +1,31 @@
 import express, { Request, Response, NextFunction } from "express";
 import fs from "fs";
+import jwtDecode from "jwt-decode";
 import signUserJWT from "../helpers/signUserJWT";
 import { con } from "../config/db";
+
+const verifyLogin = (req: Request, res: Response, next: NextFunction) => {
+  let token = req.headers.authorization?.split(" ")[1];
+  try {
+    if (token) {
+      const decodeToken = jwtDecode<{ email: string }>(token);
+      let query = `SELECT ID, email, password, name, address, phone, image FROM customer WHERE email='${decodeToken.email}'`;
+      con.query(query, (error: Error, results: any, fields: any) => {
+        if (error) {
+          return res.status(500).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+          });
+        }
+        return res.status(200).json({ success: true, results: results[0] });
+      });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "حدث خطأ ما, يرجى المحاولة لاحقا" });
+  }
+};
 
 const registerUser = (req: Request, res: Response, next: NextFunction) => {
   let { email, password, name, address, phone } = req.body;
@@ -51,7 +75,7 @@ const registerUser = (req: Request, res: Response, next: NextFunction) => {
 const loginUser = (req: Request, res: Response, next: NextFunction) => {
   let { email, password } = req.body;
 
-  let query = `SELECT ID FROM customer WHERE email="${email}" AND password="${password}"`;
+  let query = `SELECT ID, email, password, name, address, phone, image FROM customer WHERE email="${email}" AND password="${password}"`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -74,6 +98,7 @@ const loginUser = (req: Request, res: Response, next: NextFunction) => {
             return res.status(200).json({
               success: true,
               message: "تم تسجيل الدخول بنجاح",
+              customer: results[0],
               token,
             });
           }
@@ -229,6 +254,7 @@ const deleteUser = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export default {
+  verifyLogin,
   registerUser,
   loginUser,
   updateUser,
