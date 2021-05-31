@@ -28,7 +28,7 @@ app.use(express_1.default.static("build"));
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
 app.get("/", function (req, res) {
-    return res.send("<h1>Welcom</h1>");
+    return res.send("Welcom");
 });
 app.use("/", order_1.orderRouter);
 app.use("/", user_1.userRouter);

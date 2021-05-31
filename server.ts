@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.get("/", (req: express.Request, res: express.Response) =>
-  res.send("<h1>Welcom</h1>")
+  res.send("Welcom")
 );
 app.use("/", orderRouter);
 app.use("/", userRouter);
