@@ -19,8 +19,7 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 app.use(morgan("tiny"));
-
-connection;
+connection.handleDisconnect();
 
 app.use("/uploads", express.static("uploads"));
 app.use(express.static("build"));

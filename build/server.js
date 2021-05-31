@@ -22,7 +22,7 @@ var app = express_1.default();
 app.use(cors_1.default());
 app.use(helmet_1.default());
 app.use(morgan_1.default("tiny"));
-db_1.default;
+db_1.default.handleDisconnect();
 app.use("/uploads", express_1.default.static("uploads"));
 app.use(express_1.default.static("build"));
 app.use(express_1.default.urlencoded({ extended: false }));
