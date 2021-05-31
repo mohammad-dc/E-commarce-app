@@ -5,7 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "start": "node ./build/server.js",
-    "build": "echo \"build it success\" && exit 0",
+    "build": "echo \"success: app build successfully\" && exit 0",
     "dev": "NODE_ENV=development nodemon ./node_modules/.bin/ts-node server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "npm run build tsc"
