@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import fs from "fs";
 import jwtDecode from "jwt-decode";
-import signUserJWT from "../helpers/signUserJWT";
+import signDealerJWT from "../helpers/signDealerJWT";
 import { sendSMS } from "../helpers/sendSMS";
 import { con } from "../config/db";
 
@@ -92,7 +92,7 @@ const loginDealer = (req: Request, res: Response, next: NextFunction) => {
       }
       if (results) {
         if (results[0].accepted) {
-          signUserJWT(results[0], (_error, token) => {
+          signDealerJWT(results[0], (_error, token) => {
             if (_error) {
               return res.status(500).json({
                 success: false,

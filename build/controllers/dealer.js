@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
 var jwt_decode_1 = __importDefault(require("jwt-decode"));
-var signUserJWT_1 = __importDefault(require("../helpers/signUserJWT"));
+var signDealerJWT_1 = __importDefault(require("../helpers/signDealerJWT"));
 var sendSMS_1 = require("../helpers/sendSMS");
 var db_1 = require("../config/db");
 var verifyLogin = function (req, res, next) {
@@ -90,7 +90,7 @@ var loginDealer = function (req, res, next) {
             }
             if (results) {
                 if (results[0].accepted) {
-                    signUserJWT_1.default(results[0], function (_error, token) {
+                    signDealerJWT_1.default(results[0], function (_error, token) {
                         if (_error) {
                             return res.status(500).json({
                                 success: false,

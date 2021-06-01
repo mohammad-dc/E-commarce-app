@@ -1,7 +1,7 @@
 import express from "express";
 import controller from "../controllers/slider";
 import extractAdminJWT from "../helpers/extractAdminJWT";
-import extractUserJWT from "../helpers/extractUserJWT";
+import extractCustomerJWT from "../helpers/extractCustomerJWT";
 import { extractRequest } from "../helpers/extractRequest";
 import { SliderSchema } from "../validations/slider";
 import { upload } from "../helpers/uploadImage";
@@ -37,6 +37,6 @@ sliderRouter.delete(
 //customer
 sliderRouter.get(
   "/api/v1/user/customer/slider/get",
-  extractUserJWT,
+  extractCustomerJWT,
   controller.getAllSliderImages
 );

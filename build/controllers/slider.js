@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
 var db_1 = require("../config/db");
 var addSliderImage = function (req, res, next) {
-    var image = req.file.path;
+    var image = "kiwi" + req.file.path.split("kiwi")[1];
     var query = "INSERT INTO slider_image (image) VALUES (\"" + image + "\")";
     try {
         db_1.con.query(query, function (error, results, fields) {
@@ -73,7 +73,7 @@ var deleteSliderImage = function (req, res, next) {
 };
 var updateSliderImage = function (req, res, next) {
     var id = req.params.id;
-    var image = req.file.path;
+    var image = "kiwi" + req.file.path.split("kiwi")[1];
     var query = "UPDATE slider_image SET image=\"" + image + "\" WHERE ID=" + id;
     try {
         db_1.con.query("SELECT ID, image FROM slider_image WHERE id=" + id, function (error, results, fields) {

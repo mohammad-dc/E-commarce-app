@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import config from "../config/config";
-import { IAdmin } from "../interfaces/admin";
+import { IUser } from "../interfaces/user";
 
-const signAdminJWT = (
-  admin: IAdmin,
+const signDealerJWT = (
+  admin: IUser,
   callback: (error: Error | null, token: string | null) => void
 ): void => {
   try {
@@ -11,11 +11,11 @@ const signAdminJWT = (
       {
         email: admin.email,
       },
-      config.server.token.adminSecretKey,
+      config.server.token.dealerSecretKey,
       {
-        issuer: config.server.token.adminIssuerKey,
+        issuer: config.server.token.dealerIssuerKey,
         algorithm: "HS256",
-        expiresIn: "1d",
+        expiresIn: "7d",
       },
       (error, token) => {
         if (error) {
@@ -30,4 +30,4 @@ const signAdminJWT = (
   }
 };
 
-export default signAdminJWT;
+export default signDealerJWT;

@@ -1,48 +1,46 @@
 import express from "express";
 import controller from "../controllers/order";
 import extractAdminJWT from "../helpers/extractAdminJWT";
-import extractUserJWT from "../helpers/extractUserJWT";
+import extractCustomerJWT from "../helpers/extractCustomerJWT";
+import extractDealerJWT from "../helpers/extractDealerJWT";
 import { extractRequest } from "../helpers/extractRequest";
 import { orderSchema } from "../validations/order";
 
 export const orderRouter = express.Router();
 
-//user
+//customer
 orderRouter.post(
   "/api/v1/user/customer/order/create",
-  extractUserJWT,
+  extractCustomerJWT,
   extractRequest(orderSchema),
   controller.addOrder
 );
 orderRouter.put(
   "/api/v1/user/customer/order/cancel/:order_id",
-  extractUserJWT,
+  extractCustomerJWT,
   controller.cancelOrder
 );
 orderRouter.get(
   "/api/v1/user/customer/order/get/:customer_id/:month",
-  extractUserJWT,
+  extractCustomerJWT,
   controller.getUserOrders
-);
-orderRouter.get(
-  "/api/v1/user/dealer/order/get/:dealer_id/:month",
-  extractUserJWT,
-  controller.getDealerOrders
-);
-orderRouter.get(
-  "/api/v1/user/order/status/get",
-  extractUserJWT,
-  controller.getUserOrders
-);
-orderRouter.get(
-  "/api/v1/user/dealer/order/status/get/:month/:dealer_id",
-  extractUserJWT,
-  controller.getDealerOrdersStatus
 );
 orderRouter.get(
   "/api/v1/user/customer/order/status/get/:month/:customer_id",
-  extractUserJWT,
+  extractCustomerJWT,
   controller.getCustomerOrdersStatus
+);
+
+//dealer
+orderRouter.get(
+  "/api/v1/user/dealer/order/get/:dealer_id/:month",
+  extractDealerJWT,
+  controller.getDealerOrders
+);
+orderRouter.get(
+  "/api/v1/user/dealer/order/status/get/:month/:dealer_id",
+  extractDealerJWT,
+  controller.getDealerOrdersStatus
 );
 
 //admin

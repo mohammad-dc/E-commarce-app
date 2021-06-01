@@ -1,7 +1,7 @@
 import express from "express";
 import controller from "../controllers/dealer";
 import extractAdminJWT from "../helpers/extractAdminJWT";
-import extractUserJWT from "../helpers/extractUserJWT";
+import extractDealerJWT from "../helpers/extractDealerJWT";
 import { extractRequest } from "../helpers/extractRequest";
 import {
   dealerSignupSchema,
@@ -15,7 +15,7 @@ export const dealerRouter = express.Router();
 //dealer
 dealerRouter.get(
   "/api/v1/user/dealer/verify",
-  extractUserJWT,
+  extractDealerJWT,
   controller.verifyLogin
 );
 dealerRouter.post(
@@ -31,14 +31,14 @@ dealerRouter.post(
 );
 dealerRouter.put(
   "/api/v1/user/dealer/update/:id",
-  extractUserJWT,
+  extractDealerJWT,
   extractRequest(dealerUpdateSchema),
   upload.single("image"),
   controller.updateDealer
 );
 dealerRouter.get(
   "/api/v1/user/dealer/get/:id",
-  extractUserJWT,
+  extractDealerJWT,
   controller.retrieveDealer
 );
 

@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import config from "../config/config";
-import { IAdmin } from "../interfaces/admin";
+import { IUser } from "../interfaces/user";
 
-const signAdminJWT = (
-  admin: IAdmin,
+const signCustomerJWT = (
+  admin: IUser,
   callback: (error: Error | null, token: string | null) => void
 ): void => {
   try {
@@ -11,9 +11,9 @@ const signAdminJWT = (
       {
         email: admin.email,
       },
-      config.server.token.adminSecretKey,
+      config.server.token.customerSecretKey,
       {
-        issuer: config.server.token.adminIssuerKey,
+        issuer: config.server.token.customerIssuerKey,
         algorithm: "HS256",
         expiresIn: "1d",
       },
@@ -30,4 +30,4 @@ const signAdminJWT = (
   }
 };
 
-export default signAdminJWT;
+export default signCustomerJWT;

@@ -13,7 +13,7 @@ var admin_1 = require("./routes/admin");
 var order_1 = require("./routes/order");
 var slider_1 = require("./routes/slider");
 var dealer_1 = require("./routes/dealer");
-var user_1 = require("./routes/user");
+var customer_1 = require("./routes/customer");
 var cart_1 = require("./routes/cart");
 var product_1 = require("./routes/product");
 var transition_1 = require("./routes/transition");
@@ -31,7 +31,7 @@ app.get("/", function (req, res) {
     return res.send("Welcom");
 });
 app.use("/", order_1.orderRouter);
-app.use("/", user_1.userRouter);
+app.use("/", customer_1.customerRouter);
 app.use("/", admin_1.adminRouter);
 app.use("/", dealer_1.dealerRouter);
 app.use("/", slider_1.sliderRouter);

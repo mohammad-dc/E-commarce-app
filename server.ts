@@ -8,7 +8,7 @@ import { adminRouter } from "./routes/admin";
 import { orderRouter } from "./routes/order";
 import { sliderRouter } from "./routes/slider";
 import { dealerRouter } from "./routes/dealer";
-import { userRouter } from "./routes/user";
+import { customerRouter } from "./routes/customer";
 import { cartRouter } from "./routes/cart";
 import { productRouter } from "./routes/product";
 import { TransitionRouter } from "./routes/transition";
@@ -30,7 +30,7 @@ app.get("/", (req: express.Request, res: express.Response) =>
   res.send("Welcom")
 );
 app.use("/", orderRouter);
-app.use("/", userRouter);
+app.use("/", customerRouter);
 app.use("/", adminRouter);
 app.use("/", dealerRouter);
 app.use("/", sliderRouter);

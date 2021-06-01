@@ -1,7 +1,7 @@
 import express from "express";
 import controller from "../controllers/customer";
 import extractAdminJWT from "../helpers/extractAdminJWT";
-import extractUserJWT from "../helpers/extractUserJWT";
+import extractCustomerJWT from "../helpers/extractCustomerJWT";
 import { extractRequest } from "../helpers/extractRequest";
 import {
   userSignupSchema,
@@ -10,45 +10,45 @@ import {
 } from "../validations/user";
 import { upload } from "../helpers/uploadImage";
 
-export const userRouter = express.Router();
+export const customerRouter = express.Router();
 
-//user
-userRouter.get(
+//customer
+customerRouter.get(
   "/api/v1/user/customer/verify",
-  extractUserJWT,
+  extractCustomerJWT,
   controller.verifyLogin
 );
-userRouter.post(
+customerRouter.post(
   "/api/v1/user/customer/auth/register",
   extractRequest(userSignupSchema),
   controller.registerUser
 );
-userRouter.post(
+customerRouter.post(
   "/api/v1/user/customer/auth/login",
   extractRequest(userLoginSchema),
   controller.loginUser
 );
-userRouter.put(
+customerRouter.put(
   "/api/v1/user/customer/update/:id",
-  extractUserJWT,
+  extractCustomerJWT,
   extractRequest(userUpdateSchema),
-  extractUserJWT,
+  extractCustomerJWT,
   upload.single("image"),
   controller.updateUser
 );
-userRouter.get(
+customerRouter.get(
   "/api/v1/user/customer/get/:id",
-  extractUserJWT,
+  extractCustomerJWT,
   controller.retrieveUser
 );
 
 // admin
-userRouter.delete(
+customerRouter.delete(
   "/api/v1/admin/customer/delete/:id",
   extractAdminJWT,
   controller.deleteUser
 );
-userRouter.get(
+customerRouter.get(
   "/api/v1/admin/customer/get",
   extractAdminJWT,
   controller.getAllUsers

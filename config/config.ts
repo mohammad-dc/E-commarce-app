@@ -15,15 +15,21 @@ const DB_USER = process.env.DB_USER;
 const TOKEN_ADMIN_SECRET_KEY =
   process.env.TOKEN_ADMIN_SECRET_KEY ||
   "$2y$12$XsKEGjzozG415/mb7MBmxODdAHCD2pr2o60hgTmKbIzMagET1.ir6";
-const TOKEN_USER_SECRET_KEY =
-  process.env.TOKEN_USER_SECRET_KEY ||
+const TOKEN_CUSTOMER_SECRET_KEY =
+  process.env.TOKEN_CUSTOMER_SECRET_KEY ||
   "$2y$12$RKeg2ZWFYDl4tfTaUMMHOu.tPnXMRDAmloyL09IWBVLRfZJ0PEyBO";
-const TOKEN_ADMIN_ISSURE =
-  process.env.TOKEN_ADMIN_ISSURE ||
+const TOKEN_DEALER_SECRET_KEY =
+  process.env.TOKEN_DEALER_SECRET_KEY ||
+  "$2y$12$dd0MqQNSkfvYRRgQPkI1qOwiUpVGXAeESSQK5SHQAIiO7dznH6A9a";
+const TOKEN_ADMIN_ISSUER =
+  process.env.TOKEN_ADMIN_ISSUER ||
   "$2y$12$mObJxFNHvJMsqbSareX7iu9ca11HdIhKpobhFr/3V7smwzyusN4rK";
-const TOKEN_USER_ISSURE =
-  process.env.TOKEN_USER_ISSURE ||
+const TOKEN_CUSTOMER_ISSUER =
+  process.env.TOKEN_CUSTOMER_ISSUER ||
   "$2y$12$tAYqrE8tS0W.XU8c8noW.egHUVMGy26Rz5w0.npJXvUtMyQCDwaeO";
+const TOKEN_DEALER_ISSUER =
+  process.env.TOKEN_DEALER_ISSUER ||
+  "$2y$12$PfCSV46q9hJwmILudGT2k.59ogwz/WO5SoWSldWQJmqFja0x/Xoii";
 
 // Nexmo
 const NEXMO_SECRET_KEY = process.env.NEXMO_SECRET_KEY || "2c0k9yBKivOMdFvb";
@@ -33,9 +39,11 @@ const server = {
   port: PORT,
   token: {
     adminSecretKey: TOKEN_ADMIN_SECRET_KEY,
-    userSecretKey: TOKEN_USER_SECRET_KEY,
-    adminIssureKey: TOKEN_ADMIN_ISSURE,
-    userIssureKey: TOKEN_USER_ISSURE,
+    customerSecretKey: TOKEN_CUSTOMER_SECRET_KEY,
+    dealerSecretKey: TOKEN_DEALER_SECRET_KEY,
+    adminIssuerKey: TOKEN_ADMIN_ISSUER,
+    customerIssuerKey: TOKEN_CUSTOMER_ISSUER,
+    dealerIssuerKey: TOKEN_DEALER_ISSUER,
   },
   nexmo: {
     secretKey: NEXMO_SECRET_KEY,

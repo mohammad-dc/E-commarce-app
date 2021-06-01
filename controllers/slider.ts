@@ -3,7 +3,7 @@ import fs from "fs";
 import { con } from "../config/db";
 
 const addSliderImage = (req: Request, res: Response, next: NextFunction) => {
-  let image = req.file.path;
+  let image = `kiwi${req.file.path.split("kiwi")[1]}`;
 
   let query = `INSERT INTO slider_image (image) VALUES ("${image}")`;
 
@@ -73,7 +73,7 @@ const deleteSliderImage = (req: Request, res: Response, next: NextFunction) => {
 
 const updateSliderImage = (req: Request, res: Response, next: NextFunction) => {
   let { id } = req.params;
-  let image = req.file.path;
+  let image = `kiwi${req.file.path.split("kiwi")[1]}`;
 
   let query = `UPDATE slider_image SET image="${image}" WHERE ID=${id}`;
 

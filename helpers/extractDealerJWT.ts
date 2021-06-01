@@ -2,15 +2,15 @@ import jwt from "jsonwebtoken";
 import config from "../config/config";
 import { Request, Response, NextFunction } from "express";
 
-const extractAdminJWT = (req: Request, res: Response, next: NextFunction) => {
+const extractDealerJWT = (req: Request, res: Response, next: NextFunction) => {
   let token = req.headers.authorization?.split(" ")[1];
 
   if (token) {
-    jwt.verify(token, config.server.token.adminSecretKey, (error, decoded) => {
+    jwt.verify(token, config.server.token.dealerSecretKey, (error, decoded) => {
       if (error) {
         return res.status(404).json({
           success: false,
-          message: "لا يسمح لك بالدخول, يرجى تسجيل الدخول مرة اخرى",
+          message: "لا يسمح لك بالدخول!!!",
           error,
         });
       } else {
@@ -21,10 +21,10 @@ const extractAdminJWT = (req: Request, res: Response, next: NextFunction) => {
   } else {
     return res.status(401).json({
       success: false,
-      message: "لا يسمح لك بالدخول, يرجى تسجيل الدخول مرة اخرى",
+      message: "لا يسمح لك بالدخول!!!",
       error: {},
     });
   }
 };
 
-export default extractAdminJWT;
+export default extractDealerJWT;

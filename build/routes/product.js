@@ -7,19 +7,20 @@ exports.productRouter = void 0;
 var express_1 = __importDefault(require("express"));
 var product_1 = __importDefault(require("../controllers/product"));
 var extractAdminJWT_1 = __importDefault(require("../helpers/extractAdminJWT"));
-var extractUserJWT_1 = __importDefault(require("../helpers/extractUserJWT"));
+var extractCustomerJWT_1 = __importDefault(require("../helpers/extractCustomerJWT"));
+var extractDealerJWT_1 = __importDefault(require("../helpers/extractDealerJWT"));
 var extractRequest_1 = require("../helpers/extractRequest");
 var product_2 = require("../validations/product");
 var uploadImage_1 = require("../helpers/uploadImage");
 exports.productRouter = express_1.default.Router();
 // dealer
-exports.productRouter.post("/api/v1/user/dealer/product/create", extractUserJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(product_2.ProductAddSchema), product_1.default.addProduct);
-exports.productRouter.put("/api/v1/user/dealer/product/update/:id", extractUserJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(product_2.ProductUpdateSchema), product_1.default.updateProducts);
-exports.productRouter.delete("/api/v1/user/dealer/product/delete/:id", extractUserJWT_1.default, product_1.default.deleteProduct);
-exports.productRouter.get("/api/v1/user/dealer/product/get/:dealer_id", extractUserJWT_1.default, product_1.default.getAllDealerProducts);
+exports.productRouter.post("/api/v1/user/dealer/product/create", extractDealerJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(product_2.ProductAddSchema), product_1.default.addProduct);
+exports.productRouter.put("/api/v1/user/dealer/product/update/:id", extractDealerJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(product_2.ProductUpdateSchema), product_1.default.updateProducts);
+exports.productRouter.delete("/api/v1/user/dealer/product/delete/:id", extractDealerJWT_1.default, product_1.default.deleteProduct);
+exports.productRouter.get("/api/v1/user/dealer/product/get/:dealer_id", extractDealerJWT_1.default, product_1.default.getAllDealerProducts);
 //admin
 exports.productRouter.delete("/api/v1/admin/product/delete/:id", extractAdminJWT_1.default, product_1.default.deleteProduct);
 exports.productRouter.get("/api/v1/admin/product/get", extractAdminJWT_1.default, product_1.default.getAllProducts);
-//user
-exports.productRouter.post("/api/v1/user/customer/product/search/:search_name", extractUserJWT_1.default, product_1.default.searchProduct);
-exports.productRouter.get("/api/v1/user/customer/product/get", extractUserJWT_1.default, product_1.default.getAllProducts);
+//customer
+exports.productRouter.post("/api/v1/user/customer/product/search/:search_name", extractCustomerJWT_1.default, product_1.default.searchProduct);
+exports.productRouter.get("/api/v1/user/customer/product/get", extractCustomerJWT_1.default, product_1.default.getAllProducts);
