@@ -169,7 +169,7 @@ const cancelOrder = (req: Request, res: Response, next: NextFunction) => {
 
 const getAllOrders = (req: Request, res: Response, next: NextFunction) => {
   let query =
-    "SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, c.ID AS customer_id, c.name AS customer_name, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address AS order_address, d.name AS dealer_name, d.address AS dealer_address FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID INNER JOIN customer AS c on o.customer_id=c.ID INNER JOIN dealer on p.dealer_id=d.ID";
+    "SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, c.ID AS customer_id, c.name AS customer_name, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address AS order_address, d.name AS dealer_name, d.address AS dealer_address FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID INNER JOIN customer AS c on o.customer_id=c.ID INNER JOIN dealer AS d on p.dealer_id=d.ID";
 
   con.query(query, (error: Error, results: any, fields: any) => {
     if (error) {
