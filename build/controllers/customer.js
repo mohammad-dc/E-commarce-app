@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
 var jwt_decode_1 = __importDefault(require("jwt-decode"));
-var signDealerJWT_1 = __importDefault(require("../helpers/signDealerJWT"));
+var signCustomerJWT_1 = __importDefault(require("../helpers/signCustomerJWT"));
 var db_1 = require("../config/db");
 var verifyLogin = function (req, res, next) {
     var _a;
@@ -87,7 +87,7 @@ var loginUser = function (req, res, next) {
                 });
             }
             if (results) {
-                signDealerJWT_1.default(results[0], function (_error, token) {
+                signCustomerJWT_1.default(results[0], function (_error, token) {
                     if (_error) {
                         return res.status(400).json({
                             success: false,
