@@ -17,10 +17,10 @@ exports.productRouter = express_1.default.Router();
 exports.productRouter.post("/api/v1/user/dealer/product/create", extractDealerJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(product_2.ProductAddSchema), product_1.default.addProduct);
 exports.productRouter.put("/api/v1/user/dealer/product/update/:id", extractDealerJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(product_2.ProductUpdateSchema), product_1.default.updateProducts);
 exports.productRouter.delete("/api/v1/user/dealer/product/delete/:id", extractDealerJWT_1.default, product_1.default.deleteProduct);
-exports.productRouter.get("/api/v1/user/dealer/product/get/:dealer_id", extractDealerJWT_1.default, product_1.default.getAllDealerProducts);
+exports.productRouter.get("/api/v1/user/dealer/product/get/:dealer_id/:limit", extractDealerJWT_1.default, product_1.default.getAllDealerProducts);
 //admin
 exports.productRouter.delete("/api/v1/admin/product/delete/:id", extractAdminJWT_1.default, product_1.default.deleteProduct);
-exports.productRouter.get("/api/v1/admin/product/get", extractAdminJWT_1.default, product_1.default.getAllProducts);
+exports.productRouter.get("/api/v1/admin/product/get/:limit", extractAdminJWT_1.default, product_1.default.getAllProducts);
 //customer
-exports.productRouter.post("/api/v1/user/customer/product/search/:search_name", extractCustomerJWT_1.default, product_1.default.searchProduct);
-exports.productRouter.get("/api/v1/user/customer/product/get", extractCustomerJWT_1.default, product_1.default.getAllProducts);
+exports.productRouter.post("/api/v1/user/customer/product/search/:search_name/:limit", extractCustomerJWT_1.default, product_1.default.searchProduct);
+exports.productRouter.get("/api/v1/user/customer/product/get/:limit", extractCustomerJWT_1.default, product_1.default.getAllProducts);

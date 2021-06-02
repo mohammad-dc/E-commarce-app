@@ -121,7 +121,8 @@ var deleteProduct = function (req, res, next) {
     }
 };
 var getAllProducts = function (req, res, next) {
-    var query = "SELECT p.ID, d.name AS dealer_name, p.name, p.image, p.price, p.created_at FROM product AS p INNER JOIN dealer AS d on d.ID=p.dealer_id";
+    var limit = req.params.limit;
+    var query = "SELECT p.ID, d.name AS dealer_name, p.name, p.image, p.price, p.created_at FROM product AS p INNER JOIN dealer AS d on d.ID=p.dealer_id LIMIT " + (limit ? limit : 10);
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
@@ -148,8 +149,8 @@ var getAllProducts = function (req, res, next) {
     }
 };
 var getAllDealerProducts = function (req, res, next) {
-    var dealer_id = req.params.dealer_id;
-    var query = "SELECT ID, dealer_id, name, image, price, description FROM product WHERE dealer_id=" + dealer_id;
+    var _a = req.params, dealer_id = _a.dealer_id, limit = _a.limit;
+    var query = "SELECT ID, dealer_id, name, image, price, description FROM product WHERE dealer_id=" + dealer_id + " LIMIT " + (limit ? limit : 10) + " ";
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
@@ -176,8 +177,8 @@ var getAllDealerProducts = function (req, res, next) {
     }
 };
 var searchProduct = function (req, res, next) {
-    var search_name = req.params.search_name;
-    var query = "SELECT ID, dealer_id, name, image, price, description FROM product WHERE name LIKE \"" + search_name + "%\"";
+    var _a = req.params, search_name = _a.search_name, limit = _a.limit;
+    var query = "SELECT ID, dealer_id, name, image, price, description FROM product WHERE name LIKE \"" + search_name + "%\" LIMIT " + (limit ? limit : 10);
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
