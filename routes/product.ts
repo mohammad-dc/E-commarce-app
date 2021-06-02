@@ -30,7 +30,7 @@ productRouter.delete(
   controller.deleteProduct
 );
 productRouter.get(
-  "/api/v1/user/dealer/product/get/:dealer_id",
+  "/api/v1/user/dealer/product/get/:dealer_id/:limit",
   extractDealerJWT,
   controller.getAllDealerProducts
 );
@@ -42,19 +42,19 @@ productRouter.delete(
   controller.deleteProduct
 );
 productRouter.get(
-  "/api/v1/admin/product/get",
+  "/api/v1/admin/product/get/:limit",
   extractAdminJWT,
   controller.getAllProducts
 );
 
 //customer
 productRouter.post(
-  "/api/v1/user/customer/product/search/:search_name",
+  "/api/v1/user/customer/product/search/:search_name/:limit",
   extractCustomerJWT,
   controller.searchProduct
 );
 productRouter.get(
-  "/api/v1/user/customer/product/get",
+  "/api/v1/user/customer/product/get/:limit",
   extractCustomerJWT,
   controller.getAllProducts
 );

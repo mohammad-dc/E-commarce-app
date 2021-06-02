@@ -117,7 +117,10 @@ const deleteProduct = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAllProducts = (req: Request, res: Response, next: NextFunction) => {
-  let query = `SELECT p.ID, d.name AS dealer_name, p.name, p.image, p.price, p.created_at FROM product AS p INNER JOIN dealer AS d on d.ID=p.dealer_id`;
+  let { limit } = req.params;
+  let query = `SELECT p.ID, d.name AS dealer_name, p.name, p.image, p.price, p.created_at FROM product AS p INNER JOIN dealer AS d on d.ID=p.dealer_id LIMIT ${
+    limit ? limit : 10
+  }`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -148,9 +151,11 @@ const getAllDealerProducts = (
   res: Response,
   next: NextFunction
 ) => {
-  let { dealer_id } = req.params;
+  let { dealer_id, limit } = req.params;
 
-  let query = `SELECT ID, dealer_id, name, image, price, description FROM product WHERE dealer_id=${dealer_id}`;
+  let query = `SELECT ID, dealer_id, name, image, price, description FROM product WHERE dealer_id=${dealer_id} LIMIT ${
+    limit ? limit : 10
+  } `;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -177,9 +182,11 @@ const getAllDealerProducts = (
 };
 
 const searchProduct = (req: Request, res: Response, next: NextFunction) => {
-  let { search_name } = req.params;
+  let { search_name, limit } = req.params;
 
-  let query = `SELECT ID, dealer_id, name, image, price, description FROM product WHERE name LIKE "${search_name}%"`;
+  let query = `SELECT ID, dealer_id, name, image, price, description FROM product WHERE name LIKE "${search_name}%" LIMIT ${
+    limit ? limit : 10
+  }`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
