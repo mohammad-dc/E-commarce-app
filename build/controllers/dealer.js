@@ -35,7 +35,7 @@ var verifyLogin = function (req, res, next) {
 var registerDealer = function (req, res, next) {
     var _a = req.body, email = _a.email, password = _a.password, name = _a.name, type = _a.type, address = _a.address, phone = _a.phone;
     var SSN_image = "kiwi" + req.file.path.split("kiwi")[1];
-    var query = "INSERT INTO dealer (email, password, name, type, address, phone, image, SSN_image, percentage_sales, is_accepted) VALUES (\"" + email + "\", \"" + password + "\", \"" + name + "\", \"" + type + "\", \"" + address + "\", \"" + phone + "\", \"No image\", \"" + SSN_image + "\", 0, false)";
+    var query = "INSERT INTO dealer (email, password, name, type, address, phone, image, SSN_image, percentage_sales, accepted) VALUES (\"" + email + "\", \"" + password + "\", \"" + name + "\", \"" + type + "\", \"" + address + "\", \"" + phone + "\", \"No image\", \"" + SSN_image + "\", 0, false)";
     try {
         db_1.con.query("SELECT ID FROM dealer WHERE email=\"" + email + "\"", function (error, results, fields) {
             if (error) {
@@ -199,7 +199,7 @@ var retrieveDealer = function (req, res, next) {
 var getAllDealers = function (req, res, next) {
     var accepted = req.params.accepted;
     var isTrueSet = "true";
-    var query = "SELECT ID, email, password, name, type, address, phone, image, SSN_image, percentage_sales, is_accepted FROM dealer " + (accepted !== "all" ? "WHERE is_accepted=" + (isTrueSet === accepted) : "");
+    var query = "SELECT ID, email, password, name, type, address, phone, image, SSN_image, percentage_sales, accepted FROM dealer " + (accepted !== "all" ? "WHERE accepted=" + (isTrueSet === accepted) : "");
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
@@ -277,7 +277,7 @@ var deleteDealer = function (req, res, next) {
 };
 var acceptDealer = function (req, res, next) {
     var id = req.params.id;
-    var query = "UPDATE dealer SET is_accepted=true WHERE ID=" + id;
+    var query = "UPDATE dealer SET accepted=true WHERE ID=" + id;
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {

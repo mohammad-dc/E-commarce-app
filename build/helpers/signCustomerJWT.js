@@ -12,7 +12,7 @@ var signCustomerJWT = function (admin, callback) {
         }, config_1.default.server.token.customerSecretKey, {
             issuer: config_1.default.server.token.customerIssuerKey,
             algorithm: "HS256",
-            expiresIn: "1d",
+            expiresIn: "7d",
         }, function (error, token) {
             if (error) {
                 callback(error, null);

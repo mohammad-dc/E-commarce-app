@@ -33,7 +33,7 @@ const registerDealer = (req: Request, res: Response, next: NextFunction) => {
 
   let SSN_image = `kiwi${req.file.path.split("kiwi")[1]}`;
 
-  let query = `INSERT INTO dealer (email, password, name, type, address, phone, image, SSN_image, percentage_sales, is_accepted) VALUES ("${email}", "${password}", "${name}", "${type}", "${address}", "${phone}", "No image", "${SSN_image}", 0, false)`;
+  let query = `INSERT INTO dealer (email, password, name, type, address, phone, image, SSN_image, percentage_sales, accepted) VALUES ("${email}", "${password}", "${name}", "${type}", "${address}", "${phone}", "No image", "${SSN_image}", 0, false)`;
 
   try {
     con.query(
@@ -199,8 +199,8 @@ const retrieveDealer = (req: Request, res: Response, next: NextFunction) => {
 const getAllDealers = (req: Request, res: Response, next: NextFunction) => {
   let accepted = req.params.accepted;
   let isTrueSet = "true";
-  let query = `SELECT ID, email, password, name, type, address, phone, image, SSN_image, percentage_sales, is_accepted FROM dealer ${
-    accepted !== "all" ? `WHERE is_accepted=${isTrueSet === accepted}` : ""
+  let query = `SELECT ID, email, password, name, type, address, phone, image, SSN_image, percentage_sales, accepted FROM dealer ${
+    accepted !== "all" ? `WHERE accepted=${isTrueSet === accepted}` : ""
   }`;
 
   try {
@@ -278,7 +278,7 @@ const deleteDealer = (req: Request, res: Response, next: NextFunction) => {
 const acceptDealer = (req: Request, res: Response, next: NextFunction) => {
   let { id } = req.params;
 
-  let query = `UPDATE dealer SET is_accepted=true WHERE ID=${id}`;
+  let query = `UPDATE dealer SET accepted=true WHERE ID=${id}`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {

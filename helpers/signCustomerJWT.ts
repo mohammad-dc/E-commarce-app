@@ -15,7 +15,7 @@ const signCustomerJWT = (
       {
         issuer: config.server.token.customerIssuerKey,
         algorithm: "HS256",
-        expiresIn: "1d",
+        expiresIn: "7d",
       },
       (error, token) => {
         if (error) {
