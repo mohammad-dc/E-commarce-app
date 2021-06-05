@@ -39,7 +39,7 @@ var updatePrivacy = function (req, res, next) {
                     error: error,
                 });
             }
-            return res.status(201).json({
+            return res.status(200).json({
                 success: true,
                 message: "تمت التعديل",
             });
@@ -64,9 +64,9 @@ var getPrivacy = function (req, res, next) {
                     error: error,
                 });
             }
-            return res.status(201).json({
+            return res.status(200).json({
                 success: true,
-                results: results[0],
+                results: results,
             });
         });
     }
