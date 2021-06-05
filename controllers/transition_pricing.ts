@@ -7,7 +7,7 @@ const addTransitionPricing = (
   next: NextFunction
 ) => {
   let { from_city, to_city, price } = req.body;
-  let query = `INSERT INTO transition_pricing (from_city, to_city, price) VALUES ("${from_city}", "${to_city}", "${price}")`;
+  let query = `INSERT INTO transition_pricing (from_city, to_city, price) VALUES ("${from_city}", "${to_city}", ${price})`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -74,7 +74,7 @@ const updateTransitionPricing = (
   let { id } = req.params;
   let { from_city, to_city, price } = req.body;
 
-  let query = `UPDATE transition_pricing SET from_city="${from_city}", to_city="${to_city}", price="${price}" WHERE id=${id}`;
+  let query = `UPDATE transition_pricing SET from_city="${from_city}", to_city="${to_city}", price=${price} WHERE id=${id}`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {

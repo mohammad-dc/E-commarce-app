@@ -12,7 +12,6 @@ import { customerRouter } from "./routes/customer";
 import { privacyRouter } from "./routes/privacy";
 import { cartRouter } from "./routes/cart";
 import { productRouter } from "./routes/product";
-import { TransitionRouter } from "./routes/transition";
 import { TransitionPricingRouter } from "./routes/transition_pricing";
 
 const app = express();
@@ -38,7 +37,6 @@ app.use("/", sliderRouter);
 app.use("/", cartRouter);
 app.use("/", privacyRouter);
 app.use("/", productRouter);
-app.use("/", TransitionRouter);
 app.use("/", TransitionPricingRouter);
 
 app.listen(config.server.port, () =>

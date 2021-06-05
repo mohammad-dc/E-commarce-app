@@ -17,7 +17,6 @@ var customer_1 = require("./routes/customer");
 var privacy_1 = require("./routes/privacy");
 var cart_1 = require("./routes/cart");
 var product_1 = require("./routes/product");
-var transition_1 = require("./routes/transition");
 var transition_pricing_1 = require("./routes/transition_pricing");
 var app = express_1.default();
 app.use(cors_1.default());
@@ -39,7 +38,6 @@ app.use("/", slider_1.sliderRouter);
 app.use("/", cart_1.cartRouter);
 app.use("/", privacy_1.privacyRouter);
 app.use("/", product_1.productRouter);
-app.use("/", transition_1.TransitionRouter);
 app.use("/", transition_pricing_1.TransitionPricingRouter);
 app.listen(config_1.default.server.port, function () {
     return console.log("server is running at port " + config_1.default.server.port);
