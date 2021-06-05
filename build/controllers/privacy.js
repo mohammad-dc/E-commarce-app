@@ -54,7 +54,7 @@ var updatePrivacy = function (req, res, next) {
     }
 };
 var getPrivacy = function (req, res, next) {
-    var query = "SELECT subject FROM privacy";
+    var query = "SELECT * FROM privacy";
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {

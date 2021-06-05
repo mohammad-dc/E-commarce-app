@@ -58,7 +58,7 @@ const updatePrivacy = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getPrivacy = (req: Request, res: Response, next: NextFunction) => {
-  let query = "SELECT subject FROM privacy";
+  let query = "SELECT * FROM privacy";
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
