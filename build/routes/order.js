@@ -23,3 +23,4 @@ exports.orderRouter.get("/api/v1/user/dealer/order/status/get/:month/:dealer_id"
 //admin
 exports.orderRouter.get("/api/v1/admin/order/get", order_1.default.getAllOrders);
 exports.orderRouter.get("/api/v1/admin/order/status/get/:month", extractAdminJWT_1.default, order_1.default.getOrdersStatus);
+exports.orderRouter.get("/api/v1/admin/order/prices/get/:month", extractAdminJWT_1.default, order_1.default.getSumOrdersPrices);

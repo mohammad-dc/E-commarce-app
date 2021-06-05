@@ -49,7 +49,13 @@ customerRouter.delete(
   controller.deleteUser
 );
 customerRouter.get(
-  "/api/v1/admin/customer/get",
+  "/api/v1/admin/customer/get/:month?",
   extractAdminJWT,
   controller.getAllUsers
+);
+
+customerRouter.get(
+  "/api/v1/admin/customer/count/get/:month",
+  extractAdminJWT,
+  controller.getUsersCount
 );

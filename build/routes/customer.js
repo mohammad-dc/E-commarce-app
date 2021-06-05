@@ -20,4 +20,5 @@ exports.customerRouter.put("/api/v1/user/customer/update/:id", extractCustomerJW
 exports.customerRouter.get("/api/v1/user/customer/get/:id", extractCustomerJWT_1.default, customer_1.default.retrieveUser);
 // admin
 exports.customerRouter.delete("/api/v1/admin/customer/delete/:id", extractAdminJWT_1.default, customer_1.default.deleteUser);
-exports.customerRouter.get("/api/v1/admin/customer/get", extractAdminJWT_1.default, customer_1.default.getAllUsers);
+exports.customerRouter.get("/api/v1/admin/customer/get/:month?", extractAdminJWT_1.default, customer_1.default.getAllUsers);
+exports.customerRouter.get("/api/v1/admin/customer/count/get/:month", extractAdminJWT_1.default, customer_1.default.getUsersCount);

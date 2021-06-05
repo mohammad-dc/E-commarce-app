@@ -253,6 +253,32 @@ const deleteUser = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getUsersCount = (req: Request, res: Response, next: NextFunction) => {
+  let { month } = req.params;
+  let query = `SELECT COUNT(ID) FROM customer WHERE month(created_at)=${month}`;
+
+  try {
+    con.query(query, (error: Error, results: any, fields: any) => {
+      if (error) {
+        return res.status(500).json({
+          success: false,
+          message: "حدث خطأ ما يرجى المحاولة فيما بعد",
+          error,
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        results: results,
+      });
+    });
+  } catch (e) {
+    return res.status(500).json({
+      success: false,
+      message: "حدث خطأ ما يرجى المحاولة فيما بعد",
+      error: e,
+    });
+  }
+};
 export default {
   verifyLogin,
   registerUser,
@@ -261,4 +287,5 @@ export default {
   retrieveUser,
   deleteUser,
   getAllUsers,
+  getUsersCount,
 };

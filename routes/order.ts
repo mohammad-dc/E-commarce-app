@@ -50,3 +50,8 @@ orderRouter.get(
   extractAdminJWT,
   controller.getOrdersStatus
 );
+orderRouter.get(
+  "/api/v1/admin/order/prices/get/:month",
+  extractAdminJWT,
+  controller.getSumOrdersPrices
+);

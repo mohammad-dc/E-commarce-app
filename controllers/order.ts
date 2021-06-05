@@ -508,6 +508,38 @@ const getCustomerOrdersStatus = (
   });
 };
 
+const getSumOrdersPrices = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let { month } = req.params;
+
+  let query = `SELECT SUM(total_price) FROM orders WHERE month(created_at)=${month}`;
+
+  try {
+    con.query(query, (error: Error, results: any, field: any) => {
+      if (error) {
+        return res.status(500).json({
+          success: false,
+          message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+          error,
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        results,
+      });
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+      error: err,
+    });
+  }
+};
+
 export default {
   addOrder,
   updateOrder,
@@ -518,4 +550,5 @@ export default {
   getOrdersStatus,
   getDealerOrdersStatus,
   getCustomerOrdersStatus,
+  getSumOrdersPrices,
 };

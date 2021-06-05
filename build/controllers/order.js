@@ -346,6 +346,32 @@ var getCustomerOrdersStatus = function (req, res, next) {
         });
     });
 };
+var getSumOrdersPrices = function (req, res, next) {
+    var month = req.params.month;
+    var query = "SELECT SUM(total_price) FROM orders WHERE month(created_at)=" + month;
+    try {
+        db_1.con.query(query, function (error, results, field) {
+            if (error) {
+                return res.status(500).json({
+                    success: false,
+                    message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    error: error,
+                });
+            }
+            return res.status(200).json({
+                success: true,
+                results: results,
+            });
+        });
+    }
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+            error: err,
+        });
+    }
+};
 exports.default = {
     addOrder: addOrder,
     updateOrder: updateOrder,
@@ -356,4 +382,5 @@ exports.default = {
     getOrdersStatus: getOrdersStatus,
     getDealerOrdersStatus: getDealerOrdersStatus,
     getCustomerOrdersStatus: getCustomerOrdersStatus,
+    getSumOrdersPrices: getSumOrdersPrices,
 };
