@@ -15,27 +15,27 @@ privacyRouter.post(
   extractRequest(privacySchema),
   controller.createPrivacy
 );
-privacyRouter.post(
+privacyRouter.put(
   "/api/v1/admin/privacy/update",
   extractAdminJWT,
   extractRequest(privacySchema),
   controller.updatePrivacy
 );
-privacyRouter.post(
+privacyRouter.get(
   "/api/v1/admin/privacy/get",
   extractAdminJWT,
   controller.getPrivacy
 );
 
 //customer
-privacyRouter.post(
+privacyRouter.get(
   "/api/v1/user/customer/privacy/get",
   extractCustomerJWT,
   controller.getPrivacy
 );
 
 //dealer
-privacyRouter.post(
+privacyRouter.get(
   "/api/v1/user/dealer/privacy/get",
   extractDealerJWT,
   controller.getPrivacy

@@ -14,9 +14,9 @@ var privacy_2 = require("../validations/privacy");
 exports.privacyRouter = express_1.default.Router();
 //admin
 exports.privacyRouter.post("/api/v1/admin/privacy/create", extractAdminJWT_1.default, extractRequest_1.extractRequest(privacy_2.privacySchema), privacy_1.default.createPrivacy);
-exports.privacyRouter.post("/api/v1/admin/privacy/update", extractAdminJWT_1.default, extractRequest_1.extractRequest(privacy_2.privacySchema), privacy_1.default.updatePrivacy);
-exports.privacyRouter.post("/api/v1/admin/privacy/get", extractAdminJWT_1.default, privacy_1.default.getPrivacy);
+exports.privacyRouter.put("/api/v1/admin/privacy/update", extractAdminJWT_1.default, extractRequest_1.extractRequest(privacy_2.privacySchema), privacy_1.default.updatePrivacy);
+exports.privacyRouter.get("/api/v1/admin/privacy/get", extractAdminJWT_1.default, privacy_1.default.getPrivacy);
 //customer
-exports.privacyRouter.post("/api/v1/user/customer/privacy/get", extractCustomerJWT_1.default, privacy_1.default.getPrivacy);
+exports.privacyRouter.get("/api/v1/user/customer/privacy/get", extractCustomerJWT_1.default, privacy_1.default.getPrivacy);
 //dealer
-exports.privacyRouter.post("/api/v1/user/dealer/privacy/get", extractDealerJWT_1.default, privacy_1.default.getPrivacy);
+exports.privacyRouter.get("/api/v1/user/dealer/privacy/get", extractDealerJWT_1.default, privacy_1.default.getPrivacy);
