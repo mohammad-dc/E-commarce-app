@@ -256,13 +256,14 @@ var deleteUser = function (req, res, next) {
 };
 var getUsersCount = function (req, res, next) {
     var month = req.params.month;
-    var query = "SELECT COUNT(ID) FROM customer WHERE month(created_at)=" + month;
+    var query = "SELECT COUNT(ID) AS count FROM customer WHERE month(created_at)=" + month;
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({
                     success: false,
                     message: "حدث خطأ ما يرجى المحاولة فيما بعد",
+                    e_message: error.message,
                     error: error,
                 });
             }

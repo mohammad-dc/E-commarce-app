@@ -515,7 +515,7 @@ const getSumOrdersPrices = (
 ) => {
   let { month } = req.params;
 
-  let query = `SELECT SUM(total_price) FROM orders WHERE month(created_at)=${month}`;
+  let query = `SELECT SUM(total_price) AS profits FROM orders WHERE month(created_at)=${month}`;
 
   try {
     con.query(query, (error: Error, results: any, field: any) => {

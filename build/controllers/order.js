@@ -348,7 +348,7 @@ var getCustomerOrdersStatus = function (req, res, next) {
 };
 var getSumOrdersPrices = function (req, res, next) {
     var month = req.params.month;
-    var query = "SELECT SUM(total_price) FROM orders WHERE month(created_at)=" + month;
+    var query = "SELECT SUM(total_price) AS profits FROM orders WHERE month(created_at)=" + month;
     try {
         db_1.con.query(query, function (error, results, field) {
             if (error) {

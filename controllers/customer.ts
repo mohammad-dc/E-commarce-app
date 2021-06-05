@@ -255,7 +255,7 @@ const deleteUser = (req: Request, res: Response, next: NextFunction) => {
 
 const getUsersCount = (req: Request, res: Response, next: NextFunction) => {
   let { month } = req.params;
-  let query = `SELECT COUNT(ID) FROM customer WHERE month(created_at)=${month}`;
+  let query = `SELECT COUNT(ID) AS count FROM customer WHERE month(created_at)=${month}`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -263,6 +263,7 @@ const getUsersCount = (req: Request, res: Response, next: NextFunction) => {
         return res.status(500).json({
           success: false,
           message: "حدث خطأ ما يرجى المحاولة فيما بعد",
+          e_message: error.message,
           error,
         });
       }
