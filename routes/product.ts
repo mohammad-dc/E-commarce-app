@@ -48,7 +48,7 @@ productRouter.get(
 );
 
 //customer
-productRouter.post(
+productRouter.get(
   "/api/v1/user/customer/product/search/:search_name/:limit?",
   extractCustomerJWT,
   controller.searchProduct
