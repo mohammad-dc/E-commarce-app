@@ -189,7 +189,7 @@ const getUserOrders = (req: Request, res: Response, next: NextFunction) => {
   let { customer_id } = req.params;
   let { month } = req.params;
 
-  let query = `SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID INNER JOIN customer AS c on o.customer_id=c.ID WHERE c.ID=${customer_id} ${
+  let query = `SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address, o.created_at FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID INNER JOIN customer AS c on o.customer_id=c.ID WHERE c.ID=${customer_id} ${
     month === "all" ? "" : `AND month(created_at)=${month}`
   }`;
 
