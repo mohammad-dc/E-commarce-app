@@ -16,7 +16,7 @@ exports.dealerRouter = express_1.default.Router();
 exports.dealerRouter.get("/api/v1/user/dealer/verify", extractDealerJWT_1.default, dealer_1.default.verifyLogin);
 exports.dealerRouter.post("/api/v1/user/dealer/auth/register", uploadImage_1.upload.single("SSN_image"), extractRequest_1.extractRequest(dealer_2.dealerSignupSchema), dealer_1.default.registerDealer);
 exports.dealerRouter.post("/api/v1/user/dealer/auth/login", extractRequest_1.extractRequest(dealer_2.dealerLoginSchema), dealer_1.default.loginDealer);
-exports.dealerRouter.put("/api/v1/user/dealer/update/:id", extractDealerJWT_1.default, extractRequest_1.extractRequest(dealer_2.dealerUpdateSchema), uploadImage_1.upload.single("image"), dealer_1.default.updateDealer);
+exports.dealerRouter.put("/api/v1/user/dealer/update/:id", extractDealerJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(dealer_2.dealerUpdateSchema), dealer_1.default.updateDealer);
 exports.dealerRouter.get("/api/v1/user/dealer/get/:id", extractDealerJWT_1.default, dealer_1.default.retrieveDealer);
 // admin
 exports.dealerRouter.delete("/api/v1/admin/dealer/delete/:id", extractAdminJWT_1.default, dealer_1.default.deleteDealer);

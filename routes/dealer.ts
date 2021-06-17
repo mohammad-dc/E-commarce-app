@@ -32,8 +32,8 @@ dealerRouter.post(
 dealerRouter.put(
   "/api/v1/user/dealer/update/:id",
   extractDealerJWT,
-  extractRequest(dealerUpdateSchema),
   upload.single("image"),
+  extractRequest(dealerUpdateSchema),
   controller.updateDealer
 );
 dealerRouter.get(
