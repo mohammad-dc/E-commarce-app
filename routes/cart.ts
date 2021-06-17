@@ -25,7 +25,7 @@ cartRouter.delete(
   controller.deleteFromCart
 );
 cartRouter.get(
-  "/api/v1/user/customer/cart/get/:user_id",
+  "/api/v1/user/customer/cart/get/:customer_id",
   extractCustomerJWT,
   controller.getCart
 );
