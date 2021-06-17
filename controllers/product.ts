@@ -37,19 +37,21 @@ const updateProducts = (req: Request, res: Response, next: NextFunction) => {
   let { id } = req.params;
 
   let query_image = `SELECT image FROM product WHERE ID=${id}`;
-  let query = `UPDATE product SET name="${name}", image="${image}", price=${price}, description="${description}" WHERE ID=${id}`;
+  let query = `UPDATE product SET name="${name}", ${
+    req.file ? `, image="${image}"` : ""
+  }, price=${price}, description="${description}" WHERE ID=${id}`;
 
   try {
-    if (req.file) {
-      con.query(query_image, (error: Error, results: any, fields: any) => {
-        if (error) throw error;
-        if (results[0].image !== "No image") {
-          fs.unlink(`uploads/${results[0].image}`, (error) => {
-            if (error) throw error;
-          });
-        }
-      });
-    }
+    // if (req.file) {
+    //   con.query(query_image, (error: Error, results: any, fields: any) => {
+    //     if (error) throw error;
+    //     if (results[0].image !== "No image") {
+    //       fs.unlink(`uploads/${results[0].image}`, (error) => {
+    //         if (error) throw error;
+    //       });
+    //     }
+    //   });
+    // }
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({
@@ -80,32 +82,32 @@ const deleteProduct = (req: Request, res: Response, next: NextFunction) => {
   let select_image = `SELECT image FROM product WHERE ID=${id}`;
 
   try {
-    con.query(select_image, (error: Error, image_result: any, fields: any) => {
+    // con.query(select_image, (error: Error, image_result: any, fields: any) => {
+    //   if (error) {
+    //     return res.status(500).json({
+    //       success: false,
+    //       message: "حدث خطأ ما يرجى المحاولة فيما بعد",
+    //     });
+    //   }
+    //   if (image_result[0].image !== "No image") {
+    //     fs.unlink(`uploads/${image_result[0].image}`, (error) => {
+    //       if (error) throw error;
+    //     });
+    //   }
+    // });
+    con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({
           success: false,
-          message: "حدث خطأ ما يرجى المحاولة فيما بعد",
+          message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+          error,
+        });
+      } else if (results) {
+        return res.status(200).json({
+          success: true,
+          message: "تم حذف المنتج بنجاح",
         });
       }
-      if (image_result[0].image !== "No image") {
-        fs.unlink(`uploads/${image_result[0].image}`, (error) => {
-          if (error) throw error;
-        });
-      }
-      con.query(query, (error: Error, results: any, fields: any) => {
-        if (error) {
-          return res.status(500).json({
-            success: false,
-            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
-            error,
-          });
-        } else if (results) {
-          return res.status(200).json({
-            success: true,
-            message: "تم حذف المنتج بنجاح",
-          });
-        }
-      });
     });
   } catch (error) {
     return res.status(500).json({

@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs_1 = __importDefault(require("fs"));
 var jwt_decode_1 = __importDefault(require("jwt-decode"));
 var signCustomerJWT_1 = __importDefault(require("../helpers/signCustomerJWT"));
 var db_1 = require("../config/db");
@@ -149,18 +148,16 @@ var updateUser = function (req, res, next) {
     var query_select = "SELECT image FROM customer WHERE ID=" + id;
     var query = "UPDATE customer SET email=\"" + email + "\", password=\"" + password + "\", name=\"" + name + "\", address=\"" + address + "\", phone=\"" + phone + "\" " + (req.file ? ", image=\"" + image + "\"" : "") + " WHERE ID=" + id;
     try {
-        if (req.file) {
-            db_1.con.query(query_select, function (error, results, fields) {
-                if (error)
-                    throw error;
-                if (results[0].image !== "No image") {
-                    fs_1.default.unlink("uploads/" + results[0].image, function (error) {
-                        if (error)
-                            throw error;
-                    });
-                }
-            });
-        }
+        // if (req.file) {
+        //   con.query(query_select, (error: Error, results: any, fields: any) => {
+        //     if (error) throw error;
+        //     if (results[0].image !== "No image") {
+        //       fs.unlink(`uploads/${results[0].image}`, (error) => {
+        //         if (error) throw error;
+        //       });
+        //     }
+        //   });
+        // }
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({
@@ -218,18 +215,16 @@ var deleteUser = function (req, res, next) {
     var query = "DELETE FROM customer WHERE ID=" + id;
     var query_image = "SELECT image FROM customer WHERE ID=" + id;
     try {
-        if (req.file) {
-            db_1.con.query(query_image, function (error, results, fields) {
-                if (error)
-                    throw error;
-                if (results[0].image !== "No image") {
-                    fs_1.default.unlink("uploads/" + results[0].image, function (error) {
-                        if (error)
-                            throw error;
-                    });
-                }
-            });
-        }
+        // if (req.file) {
+        //   con.query(query_image, (error: Error, results: any, fields: any) => {
+        //     if (error) throw error;
+        //     if (results[0].image !== "No image") {
+        //       fs.unlink(`uploads/${results[0].image}`, (error) => {
+        //         if (error) throw error;
+        //       });
+        //     }
+        //   });
+        // }
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({

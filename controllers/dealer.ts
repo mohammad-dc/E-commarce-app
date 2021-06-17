@@ -131,19 +131,21 @@ const updateDealer = (req: Request, res: Response, next: NextFunction) => {
   let { id } = req.params;
 
   let query_image = `SELECT image FROM dealer WHERE ID=${id}`;
-  let query = `UPDATE dealer SET email="${email}", password="${password}", name="${name}", address="${address}", phone="${phone}", image="${image}" WHERE ID=${id}`;
+  let query = `UPDATE dealer SET email="${email}", password="${password}", name="${name}", address="${address}", phone="${phone}", ${
+    req.file ? `, image="${image}"` : ""
+  } WHERE ID=${id}`;
 
   try {
-    if (req.file) {
-      con.query(query_image, (error: Error, results: any, fields: any) => {
-        if (error) throw error;
-        if (results[0].image !== "No image") {
-          fs.unlink(`uploads/${results[0].image}`, (error) => {
-            if (error) throw error;
-          });
-        }
-      });
-    }
+    // if (req.file) {
+    //   con.query(query_image, (error: Error, results: any, fields: any) => {
+    //     if (error) throw error;
+    //     if (results[0].image !== "No image") {
+    //       fs.unlink(`uploads/${results[0].image}`, (error) => {
+    //         if (error) throw error;
+    //       });
+    //     }
+    //   });
+    // }
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({
@@ -234,24 +236,24 @@ const deleteDealer = (req: Request, res: Response, next: NextFunction) => {
   let query_image = `SELECT image, SSN_image FROM dealer WHERE ID=${id}`;
 
   try {
-    con.query(query_image, (error: Error, results: any) => {
-      if (error) {
-        return res.status(500).json({
-          success: false,
-          message: "حدث خطأ ما, يرجى المحاولة لاحقا",
-          error,
-        });
-      } else if (results) {
-        if (results[0].image !== "No image") {
-          fs.unlink(`uploads/${results[0].image}`, (error) => {
-            if (error) throw error;
-          });
-          fs.unlink(`uploads/${results[0].SSN_image}`, (error) => {
-            if (error) throw error;
-          });
-        }
-      }
-    });
+    // con.query(query_image, (error: Error, results: any) => {
+    //   if (error) {
+    //     return res.status(500).json({
+    //       success: false,
+    //       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+    //       error,
+    //     });
+    //   } else if (results) {
+    //     if (results[0].image !== "No image") {
+    //       fs.unlink(`uploads/${results[0].image}`, (error) => {
+    //         if (error) throw error;
+    //       });
+    //       fs.unlink(`uploads/${results[0].SSN_image}`, (error) => {
+    //         if (error) throw error;
+    //       });
+    //     }
+    //   }
+    // });
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({

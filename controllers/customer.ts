@@ -152,16 +152,16 @@ const updateUser = (req: Request, res: Response, next: NextFunction) => {
   } WHERE ID=${id}`;
 
   try {
-    if (req.file) {
-      con.query(query_select, (error: Error, results: any, fields: any) => {
-        if (error) throw error;
-        if (results[0].image !== "No image") {
-          fs.unlink(`uploads/${results[0].image}`, (error) => {
-            if (error) throw error;
-          });
-        }
-      });
-    }
+    // if (req.file) {
+    //   con.query(query_select, (error: Error, results: any, fields: any) => {
+    //     if (error) throw error;
+    //     if (results[0].image !== "No image") {
+    //       fs.unlink(`uploads/${results[0].image}`, (error) => {
+    //         if (error) throw error;
+    //       });
+    //     }
+    //   });
+    // }
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({
@@ -220,16 +220,16 @@ const deleteUser = (req: Request, res: Response, next: NextFunction) => {
   let query = `DELETE FROM customer WHERE ID=${id}`;
   let query_image = `SELECT image FROM customer WHERE ID=${id}`;
   try {
-    if (req.file) {
-      con.query(query_image, (error: Error, results: any, fields: any) => {
-        if (error) throw error;
-        if (results[0].image !== "No image") {
-          fs.unlink(`uploads/${results[0].image}`, (error) => {
-            if (error) throw error;
-          });
-        }
-      });
-    }
+    // if (req.file) {
+    //   con.query(query_image, (error: Error, results: any, fields: any) => {
+    //     if (error) throw error;
+    //     if (results[0].image !== "No image") {
+    //       fs.unlink(`uploads/${results[0].image}`, (error) => {
+    //         if (error) throw error;
+    //       });
+    //     }
+    //   });
+    // }
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({
