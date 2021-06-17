@@ -184,7 +184,7 @@ const getAllDealerProducts = (
 const searchProduct = (req: Request, res: Response, next: NextFunction) => {
   let { search_name, limit } = req.params;
 
-  let query = `SELECT ID, dealer_id, name, image, price, description FROM product WHERE name LIKE "${search_name}%" LIMIT ${
+  let query = `SELECT ID, dealer_id, name, image, price, description FROM product WHERE name LIKE "%${search_name}%" LIMIT ${
     limit ? limit : 10
   }`;
 
