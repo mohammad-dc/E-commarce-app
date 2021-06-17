@@ -2,9 +2,9 @@ import express, { Request, Response, NextFunction } from "express";
 import { con } from "../config/db";
 
 const addToCart = (req: Request, res: Response, next: NextFunction) => {
-  let { product_id, user_id, quantity, total_price } = req.body;
+  let { product_id, customer_id, quantity, total_price } = req.body;
 
-  let query = `INSERT INTO cart (product_id, user_id, quantity, total_price) VALUES (${product_id}, ${user_id}, ${quantity}, ${total_price})`;
+  let query = `INSERT INTO cart (product_id, customer_id, quantity, total_price) VALUES (${product_id}, ${customer_id}, ${quantity}, ${total_price})`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
@@ -90,9 +90,9 @@ const deleteFromCart = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getCart = (req: Request, res: Response, next: NextFunction) => {
-  let { user_id } = req.params;
+  let { customer_id } = req.params;
 
-  let query = `SELECT c.ID, c.user_id, c.quantity, c.total_price, p.ID, p.name, p.image, p.price, p.description FROM cart AS c INNER JOIN product AS p ON c.product_id = p.ID WHERE c.user_id=${user_id}`;
+  let query = `SELECT c.ID, c.customer_id, c.quantity, c.total_price, p.ID, p.name, p.image, p.price, p.description FROM cart AS c INNER JOIN product AS p ON c.product_id = p.ID WHERE c.customer_id=${customer_id}`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
