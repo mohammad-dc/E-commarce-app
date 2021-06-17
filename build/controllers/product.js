@@ -178,7 +178,7 @@ var getAllDealerProducts = function (req, res, next) {
 };
 var searchProduct = function (req, res, next) {
     var _a = req.params, search_name = _a.search_name, type = _a.type, limit = _a.limit;
-    var query = "SELECT p.ID, p.dealer_id, p.name, p.image, p.price, p.description FROM product as p INNER JOIN dealer as d WHERE name LIKE \"%" + search_name + "%\" AND d.type=\"" + type + "\" LIMIT " + (limit ? limit : 20);
+    var query = "SELECT p.ID, p.dealer_id, p.name AS product_name, p.image, p.price, p.description FROM product AS p INNER JOIN dealer AS d WHERE name LIKE \"%" + search_name + "%\" AND d.type=\"" + type + "\" LIMIT " + (limit ? limit : 20);
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
