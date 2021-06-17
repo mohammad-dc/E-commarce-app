@@ -182,10 +182,10 @@ const getAllDealerProducts = (
 };
 
 const searchProduct = (req: Request, res: Response, next: NextFunction) => {
-  let { search_name, limit } = req.params;
+  let { search_name, type, limit } = req.params;
 
-  let query = `SELECT ID, dealer_id, name, image, price, description FROM product WHERE name LIKE "%${search_name}%" LIMIT ${
-    limit ? limit : 10
+  let query = `SELECT ID, dealer_id, name, image, price, description FROM product INNER JOIN dealer as d WHERE name LIKE "%${search_name}%" AND d.type="${type}" LIMIT ${
+    limit ? limit : 20
   }`;
 
   try {

@@ -22,5 +22,5 @@ exports.productRouter.get("/api/v1/user/dealer/product/get/:dealer_id/:limit?", 
 exports.productRouter.delete("/api/v1/admin/product/delete/:id", extractAdminJWT_1.default, product_1.default.deleteProduct);
 exports.productRouter.get("/api/v1/admin/product/get/:limit?", extractAdminJWT_1.default, product_1.default.getAllProducts);
 //customer
-exports.productRouter.get("/api/v1/user/customer/product/search/:search_name/:limit?", extractCustomerJWT_1.default, product_1.default.searchProduct);
+exports.productRouter.get("/api/v1/user/customer/product/search/:search_name/:type/:limit?", extractCustomerJWT_1.default, product_1.default.searchProduct);
 exports.productRouter.get("/api/v1/user/customer/product/get/:limit?", extractCustomerJWT_1.default, product_1.default.getAllProducts);

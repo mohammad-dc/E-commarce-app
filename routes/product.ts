@@ -49,7 +49,7 @@ productRouter.get(
 
 //customer
 productRouter.get(
-  "/api/v1/user/customer/product/search/:search_name/:limit?",
+  "/api/v1/user/customer/product/search/:search_name/:type/:limit?",
   extractCustomerJWT,
   controller.searchProduct
 );
