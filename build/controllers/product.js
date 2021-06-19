@@ -197,6 +197,33 @@ var searchProduct = function (req, res, next) {
         });
     }
 };
+var getSampleProducts = function (req, res, next) {
+    var query = "SELECT ID, dealer_id, name, image, price, description FROM product ORDER BY RAND() LIMIT 10";
+    try {
+        db_1.con.query(query, function (error, results, fields) {
+            if (error) {
+                return res.status(500).json({
+                    success: false,
+                    message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    error: error,
+                });
+            }
+            else if (results) {
+                return res.status(200).json({
+                    success: true,
+                    results: results,
+                });
+            }
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+            error: error,
+        });
+    }
+};
 exports.default = {
     addProduct: addProduct,
     updateProducts: updateProducts,
@@ -204,4 +231,5 @@ exports.default = {
     getAllProducts: getAllProducts,
     getAllDealerProducts: getAllDealerProducts,
     searchProduct: searchProduct,
+    getSampleProducts: getSampleProducts,
 };

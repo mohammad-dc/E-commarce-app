@@ -214,6 +214,33 @@ const searchProduct = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getSampleProducts = (req: Request, res: Response, next: NextFunction) => {
+  let query =
+    "SELECT ID, dealer_id, name, image, price, description FROM product ORDER BY RAND() LIMIT 10";
+
+  try {
+    con.query(query, (error: Error, results: any, fields: any) => {
+      if (error) {
+        return res.status(500).json({
+          success: false,
+          message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+          error,
+        });
+      } else if (results) {
+        return res.status(200).json({
+          success: true,
+          results,
+        });
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+      error,
+    });
+  }
+};
 export default {
   addProduct,
   updateProducts,
@@ -221,4 +248,5 @@ export default {
   getAllProducts,
   getAllDealerProducts,
   searchProduct,
+  getSampleProducts,
 };

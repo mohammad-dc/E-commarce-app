@@ -58,3 +58,8 @@ productRouter.get(
   extractCustomerJWT,
   controller.getAllProducts
 );
+productRouter.get(
+  "/api/v1/user/customer/product/sample/get",
+  extractCustomerJWT,
+  controller.getSampleProducts
+);

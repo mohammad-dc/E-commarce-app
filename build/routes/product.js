@@ -24,3 +24,4 @@ exports.productRouter.get("/api/v1/admin/product/get/:limit?", extractAdminJWT_1
 //customer
 exports.productRouter.get("/api/v1/user/customer/product/search/:search_name/:type/:limit?", extractCustomerJWT_1.default, product_1.default.searchProduct);
 exports.productRouter.get("/api/v1/user/customer/product/get/:limit?", extractCustomerJWT_1.default, product_1.default.getAllProducts);
+exports.productRouter.get("/api/v1/user/customer/product/sample/get", extractCustomerJWT_1.default, product_1.default.getSampleProducts);
