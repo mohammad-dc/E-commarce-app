@@ -216,7 +216,7 @@ const getUserOrders = (req: Request, res: Response, next: NextFunction) => {
 const getDealerOrders = (req: Request, res: Response, next: NextFunction) => {
   let { dealer_id } = req.params;
   let { month } = req.params;
-  let query = `SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID WHERE p.dealer_id=${dealer_id} ${
+  let query = `SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address, o.created_at FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID WHERE p.dealer_id=${dealer_id} ${
     month === "all"
       ? ""
       : `AND month(o.created_at)=${month} AND year(o.created_at)=${new Date().getFullYear()}`
