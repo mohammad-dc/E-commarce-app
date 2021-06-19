@@ -38,7 +38,7 @@ const updateProducts = (req: Request, res: Response, next: NextFunction) => {
 
   let query_image = `SELECT image FROM product WHERE ID=${id}`;
   let query = `UPDATE product SET name="${name}", ${
-    req.file ? `, image="${image},"` : ""
+    req.file ? ` image="${image},"` : ""
   } price=${price}, description="${description}" WHERE ID=${id}`;
 
   try {

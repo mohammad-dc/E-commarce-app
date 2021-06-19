@@ -35,7 +35,7 @@ var updateProducts = function (req, res, next) {
     var image = "kiwi" + req.file.path.split("kiwi")[1];
     var id = req.params.id;
     var query_image = "SELECT image FROM product WHERE ID=" + id;
-    var query = "UPDATE product SET name=\"" + name + "\", " + (req.file ? ", image=\"" + image + ",\"" : "") + " price=" + price + ", description=\"" + description + "\" WHERE ID=" + id;
+    var query = "UPDATE product SET name=\"" + name + "\", " + (req.file ? " image=\"" + image + ",\"" : "") + " price=" + price + ", description=\"" + description + "\" WHERE ID=" + id;
     try {
         // if (req.file) {
         //   con.query(query_image, (error: Error, results: any, fields: any) => {
