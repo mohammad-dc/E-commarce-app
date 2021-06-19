@@ -27,6 +27,7 @@ const addOrder = (req: Request, res: Response, next: NextFunction) => {
         return res.status(500).json({
           success: false,
           message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+          error,
         });
       }
       return res.status(201).json({
@@ -133,6 +134,7 @@ const addOrder = (req: Request, res: Response, next: NextFunction) => {
               return res.status(500).json({
                 success: false,
                 message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+                error,
               });
             }
             return res.status(201).json({
@@ -176,6 +178,7 @@ const getAllOrders = (req: Request, res: Response, next: NextFunction) => {
       return res.status(500).json({
         success: false,
         message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+        error,
       });
     }
     return res.status(200).json({
@@ -190,7 +193,11 @@ const getUserOrders = (req: Request, res: Response, next: NextFunction) => {
   let { month } = req.params;
 
   let query = `SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address, o.created_at FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID INNER JOIN customer AS c on o.customer_id=c.ID WHERE c.ID=${customer_id} ${
-    month === "all" ? "" : `AND month(created_at)=${month}`
+    month === "all"
+      ? ""
+      : `AND month(created_at)=${month} AND year(created_at)=${
+          new Date().getFullYear
+        }`
   }`;
 
   con.query(query, (error: Error, results: any, field: any) => {
@@ -198,6 +205,7 @@ const getUserOrders = (req: Request, res: Response, next: NextFunction) => {
       return res.status(500).json({
         success: false,
         message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+        error,
       });
     }
     return res.status(200).json({
@@ -211,7 +219,11 @@ const getDealerOrders = (req: Request, res: Response, next: NextFunction) => {
   let { dealer_id } = req.params;
   let { month } = req.params;
   let query = `SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID WHERE o.dealer_id=${dealer_id} ${
-    month === "all" ? "" : `AND month(created_at)=${month}`
+    month === "all"
+      ? ""
+      : `AND month(created_at)=${month} AND year(created_at)=${
+          new Date().getFullYear
+        }`
   }`;
 
   con.query(query, (error: Error, results: any, field: any) => {
@@ -219,6 +231,7 @@ const getDealerOrders = (req: Request, res: Response, next: NextFunction) => {
       return res.status(500).json({
         success: false,
         message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+        error,
       });
     }
     return res.status(200).json({
