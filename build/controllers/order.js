@@ -138,7 +138,7 @@ var getUserOrders = function (req, res, next) {
     var month = req.params.month;
     var query = "SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address, o.created_at FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID INNER JOIN customer AS c on o.customer_id=c.ID WHERE c.ID=" + customer_id + " " + (month === "all"
         ? ""
-        : "AND month(created_at)=" + month + " AND year(created_at)=" + new Date().getFullYear());
+        : "AND month(o.created_at)=" + month + " AND year(o.created_at)=" + new Date().getFullYear());
     db_1.con.query(query, function (error, results, field) {
         if (error) {
             return res.status(500).json({
@@ -158,7 +158,7 @@ var getDealerOrders = function (req, res, next) {
     var month = req.params.month;
     var query = "SELECT o.ID, p.ID AS product_id, p.name AS product_name, p.image AS product_image, o.quantity, o.total_price, o.payment_method, o.status, o.transition_price, o.address FROM orders AS o INNER JOIN product AS p on o.product_id=p.ID WHERE p.dealer_id=" + dealer_id + " " + (month === "all"
         ? ""
-        : "AND month(created_at)=" + month + " AND year(created_at)=" + new Date().getFullYear());
+        : "AND month(o.created_at)=" + month + " AND year(o.created_at)=" + new Date().getFullYear());
     db_1.con.query(query, function (error, results, field) {
         if (error) {
             return res.status(500).json({
