@@ -131,7 +131,7 @@ const updateDealer = (req: Request, res: Response, next: NextFunction) => {
   let { id } = req.params;
 
   let query_image = `SELECT image FROM dealer WHERE ID=${id}`;
-  let query = `UPDATE dealer SET email="${email}", password="${password}", name="${name}", address="${address}", phone="${phone}", ${
+  let query = `UPDATE dealer SET email="${email}", password="${password}", name="${name}", address="${address}", phone="${phone}" ${
     req.file ? `, image="${image}"` : ""
   } WHERE ID=${id}`;
 

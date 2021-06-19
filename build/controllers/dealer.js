@@ -129,7 +129,7 @@ var updateDealer = function (req, res, next) {
     var image = "kiwi" + req.file.path.split("kiwi")[1];
     var id = req.params.id;
     var query_image = "SELECT image FROM dealer WHERE ID=" + id;
-    var query = "UPDATE dealer SET email=\"" + email + "\", password=\"" + password + "\", name=\"" + name + "\", address=\"" + address + "\", phone=\"" + phone + "\", " + (req.file ? ", image=\"" + image + "\"" : "") + " WHERE ID=" + id;
+    var query = "UPDATE dealer SET email=\"" + email + "\", password=\"" + password + "\", name=\"" + name + "\", address=\"" + address + "\", phone=\"" + phone + "\" " + (req.file ? ", image=\"" + image + "\"" : "") + " WHERE ID=" + id;
     try {
         // if (req.file) {
         //   con.query(query_image, (error: Error, results: any, fields: any) => {
