@@ -28,15 +28,4 @@ privacyRouter.get(
 );
 
 //customer
-privacyRouter.get(
-  "/api/v1/user/customer/privacy/get",
-  extractCustomerJWT,
-  controller.getPrivacy
-);
-
-//dealer
-privacyRouter.get(
-  "/api/v1/user/dealer/privacy/get",
-  extractDealerJWT,
-  controller.getPrivacy
-);
+privacyRouter.get("/api/v1/user/privacy/get", controller.getPrivacy);

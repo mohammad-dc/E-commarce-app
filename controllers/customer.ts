@@ -98,7 +98,7 @@ const loginUser = (req: Request, res: Response, next: NextFunction) => {
             return res.status(200).json({
               success: true,
               message: "تم تسجيل الدخول بنجاح",
-              customer: results[0],
+              result: results[0],
               token,
             });
           }

@@ -36,6 +36,12 @@ const registerDealer = (req: Request, res: Response, next: NextFunction) => {
   let query = `INSERT INTO dealer (email, password, name, type, address, phone, image, SSN_image, percentage_sales, accepted) VALUES ("${email}", "${password}", "${name}", "${type}", "${address}", "${phone}", "No image", "${SSN_image}", 0, false)`;
 
   try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "يجب ان تقوم بتحميل صورة الهوية",
+      });
+    }
     con.query(
       `SELECT ID FROM dealer WHERE email="${email}"`,
       (error: Error, results: any, fields: any) => {
@@ -103,7 +109,7 @@ const loginDealer = (req: Request, res: Response, next: NextFunction) => {
               return res.status(200).json({
                 success: true,
                 message: "تم تسجيل الدخول بنجاح",
-                dealer: results[0],
+                result: results[0],
                 token,
               });
             }

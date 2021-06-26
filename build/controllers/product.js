@@ -6,6 +6,12 @@ var addProduct = function (req, res, next) {
     var image = "kiwi" + req.file.path.split("kiwi")[1];
     var query = "INSERT INTO product (dealer_id, name, image, price, description) VALUES (" + dealer_id + ", \"" + name + "\", \"" + image + "\", " + price + ", \"" + description + "\")";
     try {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "يجب ان تقوم بتحميل صورة للمنتج",
+            });
+        }
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({

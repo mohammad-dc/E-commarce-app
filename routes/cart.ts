@@ -14,13 +14,13 @@ cartRouter.post(
   controller.addToCart
 );
 cartRouter.put(
-  "/api/v1/user/customer/cart/update",
+  "/api/v1/user/customer/cart/update/:id",
   extractCustomerJWT,
   extractRequest(CartSchema),
   controller.updateFromCart
 );
 cartRouter.delete(
-  "/api/v1/user/customer/cart/delete",
+  "/api/v1/user/customer/cart/delete/:id",
   extractCustomerJWT,
   controller.deleteFromCart
 );

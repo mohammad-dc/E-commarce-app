@@ -8,6 +8,12 @@ const addProduct = (req: Request, res: Response, next: NextFunction) => {
   let query = `INSERT INTO product (dealer_id, name, image, price, description) VALUES (${dealer_id}, "${name}", "${image}", ${price}, "${description}")`;
 
   try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "يجب ان تقوم بتحميل صورة للمنتج",
+      });
+    }
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({
