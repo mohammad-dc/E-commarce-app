@@ -186,7 +186,7 @@ var retrieveDealer = function (req, res, next) {
             else if (results) {
                 return res.status(200).json({
                     success: true,
-                    results: results,
+                    results: results[0],
                 });
             }
         });

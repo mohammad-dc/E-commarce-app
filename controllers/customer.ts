@@ -201,7 +201,7 @@ const retrieveUser = (req: Request, res: Response, next: NextFunction) => {
       } else if (results) {
         return res.status(200).json({
           success: true,
-          results,
+          results: results[0],
         });
       }
     });
