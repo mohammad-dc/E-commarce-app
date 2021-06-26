@@ -197,7 +197,7 @@ var retrieveUser = function (req, res, next) {
             else if (results) {
                 return res.status(200).json({
                     success: true,
-                    results: results[0],
+                    results: results,
                 });
             }
         });
