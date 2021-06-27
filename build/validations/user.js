@@ -37,6 +37,5 @@ exports.userUpdateSchema = yup.object().shape({
     password: yup.string().min(8),
     name: yup.string().required(),
     address: yup.string().required(),
-    phone: yup.string(),
-    image: yup.mixed(),
+    phone: yup.string().required(),
 });
