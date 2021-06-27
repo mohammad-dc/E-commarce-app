@@ -31,7 +31,7 @@ customerRouter.post(
 customerRouter.put(
   "/api/v1/user/customer/update/:id",
   extractCustomerJWT,
-  upload.single("image"),
+  (req, res, next) => (req.file ? upload.single("image") : next()),
   extractRequest(userUpdateSchema),
   controller.updateUser
 );
