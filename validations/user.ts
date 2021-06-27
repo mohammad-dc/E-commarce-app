@@ -18,6 +18,6 @@ export const userUpdateSchema = yup.object().shape({
   password: yup.string().min(8),
   name: yup.string().required(),
   address: yup.string().required(),
-  phone: yup.string(),
+  phone: yup.string().required(),
   image: yup.mixed(),
 });
