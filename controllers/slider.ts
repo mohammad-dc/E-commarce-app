@@ -130,7 +130,7 @@ const getAllSliderImages = (
       } else if (results) {
         return res.status(200).json({
           success: true,
-          slider: results,
+          results,
         });
       }
     });
