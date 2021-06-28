@@ -88,7 +88,7 @@ var deleteFromCart = function (req, res, next) {
 };
 var getCart = function (req, res, next) {
     var customer_id = req.params.customer_id;
-    var query = "SELECT c.ID, c.customer_id, c.quantity, c.total_price, p.ID, p.name, p.image, p.price, p.description FROM cart AS c INNER JOIN product AS p ON c.product_id = p.ID WHERE c.customer_id=" + customer_id;
+    var query = "SELECT c.ID, c.product_id, c.customer_id, c.quantity, c.total_price, p.name, p.image, p.price, p.description FROM cart AS c INNER JOIN product AS p ON c.product_id = p.ID WHERE c.customer_id=" + customer_id;
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {

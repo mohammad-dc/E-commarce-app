@@ -92,7 +92,7 @@ const deleteFromCart = (req: Request, res: Response, next: NextFunction) => {
 const getCart = (req: Request, res: Response, next: NextFunction) => {
   let { customer_id } = req.params;
 
-  let query = `SELECT c.ID, c.customer_id, c.quantity, c.total_price, p.ID, p.name, p.image, p.price, p.description FROM cart AS c INNER JOIN product AS p ON c.product_id = p.ID WHERE c.customer_id=${customer_id}`;
+  let query = `SELECT c.ID, c.product_id, c.customer_id, c.quantity, c.total_price, p.name, p.image, p.price, p.description FROM cart AS c INNER JOIN product AS p ON c.product_id = p.ID WHERE c.customer_id=${customer_id}`;
 
   try {
     con.query(query, (error: Error, results: any, fields: any) => {
