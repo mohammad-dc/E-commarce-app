@@ -35,6 +35,12 @@ productRouter.get(
   controller.getAllDealerProducts
 );
 
+productRouter.get(
+  "/api/v1/user/dealer/product/search/:dealer_id/:search_name/:limit?",
+  extractDealerJWT,
+  controller.searchDealerProduct
+);
+
 //admin
 productRouter.delete(
   "/api/v1/admin/product/delete/:id",

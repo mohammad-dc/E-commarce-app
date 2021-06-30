@@ -177,7 +177,7 @@ var getAllDealerProducts = function (req, res, next) {
 };
 var searchProduct = function (req, res, next) {
     var _a = req.params, search_name = _a.search_name, type = _a.type, limit = _a.limit;
-    var query = "SELECT p.ID, p.dealer_id, p.name, p.image, p.price, p.description FROM product AS p INNER JOIN dealer AS d ON p.dealer_id=d.ID WHERE p.name LIKE \"%" + search_name + "%\" AND d.type=\"" + type + "\" LIMIT " + (limit ? limit : 50);
+    var query = "SELECT p.ID, p.dealer_id, p.name, p.image, p.price, p.description, d.phone AS dealer_phone, d.address AS dealer_address FROM product AS p INNER JOIN dealer AS d ON p.dealer_id=d.ID WHERE p.name LIKE \"%" + search_name + "%\" AND d.type=\"" + type + "\" LIMIT " + (limit ? limit : 50);
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
@@ -204,7 +204,35 @@ var searchProduct = function (req, res, next) {
     }
 };
 var getSampleProducts = function (req, res, next) {
-    var query = "SELECT ID, dealer_id, name, image, price, description FROM product ORDER BY RAND() LIMIT 10";
+    var query = "SELECT p.ID, p.name, p.image, p.price, p.description, d.phone AS dealer_phone, d.address AS dealer_address FROM product AS p INNER JOIN dealer AS d ON p.dealer_id=d.ID ORDER BY RAND() LIMIT 10";
+    try {
+        db_1.con.query(query, function (error, results, fields) {
+            if (error) {
+                return res.status(500).json({
+                    success: false,
+                    message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    error: error,
+                });
+            }
+            else if (results) {
+                return res.status(200).json({
+                    success: true,
+                    results: results,
+                });
+            }
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+            error: error,
+        });
+    }
+};
+var searchDealerProduct = function (req, res, next) {
+    var _a = req.params, dealer_id = _a.dealer_id, search_name = _a.search_name, limit = _a.limit;
+    var query = "SELECT p.ID, p.name, p.image, p.price, p.description FROM product AS p INNER JOIN dealer AS d on p.dealer_id=d.ID WHERE p.dealer_id=" + dealer_id + " AND p.name LIKE \"%" + search_name + "%\" LIMIT " + (limit ? limit : 50);
     try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
@@ -238,4 +266,5 @@ exports.default = {
     getAllDealerProducts: getAllDealerProducts,
     searchProduct: searchProduct,
     getSampleProducts: getSampleProducts,
+    searchDealerProduct: searchDealerProduct,
 };
