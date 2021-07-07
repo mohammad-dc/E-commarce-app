@@ -33,12 +33,7 @@ customerRouter.put(
   extractCustomerJWT,
   (upload.single("image"),
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    upload.single("image")(req, res, (error) => {
-      if (error) {
-        res.status(400).json({ error, success: false, message: error.message });
-      }
-      res.send("Successfully uploaded " + req.files.length + " files!");
-    });
+    res.status(400).json(req.body);
   },
   extractRequest(userUpdateSchema),
   controller.updateUser)

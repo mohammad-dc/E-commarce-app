@@ -18,12 +18,7 @@ exports.customerRouter.post("/api/v1/user/customer/auth/register", extractReques
 exports.customerRouter.post("/api/v1/user/customer/auth/login", extractRequest_1.extractRequest(user_1.userLoginSchema), customer_1.default.loginUser);
 exports.customerRouter.put("/api/v1/user/customer/update/:id", extractCustomerJWT_1.default, (uploadImage_1.upload.single("image"),
     function (req, res, next) {
-        uploadImage_1.upload.single("image")(req, res, function (error) {
-            if (error) {
-                res.status(400).json({ error: error, success: false, message: error.message });
-            }
-            res.send("Successfully uploaded " + req.files.length + " files!");
-        });
+        res.status(400).json(req.body);
     },
     extractRequest_1.extractRequest(user_1.userUpdateSchema),
     customer_1.default.updateUser));
