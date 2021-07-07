@@ -16,7 +16,12 @@ exports.customerRouter.get("/api/v1/user/customer/verify", extractCustomerJWT_1.
 exports.customerRouter.post("/api/v1/user/customer/auth/register", extractRequest_1.extractRequest(user_1.userSignupSchema), customer_1.default.registerUser);
 exports.customerRouter.post("/api/v1/user/customer/auth/login", extractRequest_1.extractRequest(user_1.userLoginSchema), customer_1.default.loginUser);
 exports.customerRouter.put("/api/v1/user/customer/update/:id", extractCustomerJWT_1.default, function (req, res, next) {
-    res.status(400).json(req.body);
+    if (req.file) {
+        res.status(400).json({ success: true });
+    }
+    else {
+        res.status(400).json(req.body);
+    }
 }, extractRequest_1.extractRequest(user_1.userUpdateSchema), customer_1.default.updateUser);
 exports.customerRouter.get("/api/v1/user/customer/get/:id", extractCustomerJWT_1.default, customer_1.default.retrieveUser);
 // admin
