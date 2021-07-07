@@ -31,17 +31,17 @@ customerRouter.post(
 customerRouter.put(
   "/api/v1/user/customer/update/:id",
   extractCustomerJWT,
+  (upload.single("image"),
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    try {
-      upload.single("image");
-      next();
-    } catch (error) {
-      res.json(error);
-      next();
-    }
+    upload.single("image")(req, res, (error) => {
+      if (error) {
+        res.status(400).json({ error, success: false, message: error.message });
+      }
+      res.send("Successfully uploaded " + req.files.length + " files!");
+    });
   },
   extractRequest(userUpdateSchema),
-  controller.updateUser
+  controller.updateUser)
 );
 customerRouter.get(
   "/api/v1/user/customer/get/:id",
