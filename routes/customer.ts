@@ -32,7 +32,7 @@ customerRouter.put(
   "/api/v1/user/customer/update/:id",
   extractCustomerJWT,
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.status(400).json({ success: typeof req.body });
+    res.status(400).json({ success: req.body.image });
     if (req.file) {
       res.status(400).json({ success: true });
     } else {
