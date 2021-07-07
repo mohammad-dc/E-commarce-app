@@ -19,12 +19,14 @@ exports.customerRouter.post("/api/v1/user/customer/auth/login", extractRequest_1
 exports.customerRouter.put("/api/v1/user/customer/update/:id", extractCustomerJWT_1.default, function (req, res, next) {
     if (Object.keys(req.body).length === 0) {
         uploadImage_1.upload.single("image");
-        next();
+        extractRequest_1.extractRequest(user_1.userUpdateSchema);
+        customer_1.default.updateUser;
     }
     else {
-        next();
+        extractRequest_1.extractRequest(user_1.userUpdateSchema);
+        customer_1.default.updateUser;
     }
-}, extractRequest_1.extractRequest(user_1.userUpdateSchema), customer_1.default.updateUser);
+});
 exports.customerRouter.get("/api/v1/user/customer/get/:id", extractCustomerJWT_1.default, customer_1.default.retrieveUser);
 // admin
 exports.customerRouter.delete("/api/v1/admin/customer/delete/:id", extractAdminJWT_1.default, customer_1.default.deleteUser);

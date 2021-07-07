@@ -34,13 +34,13 @@ customerRouter.put(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (Object.keys(req.body).length === 0) {
       upload.single("image");
-      next();
+      extractRequest(userUpdateSchema);
+      controller.updateUser;
     } else {
-      next();
+      extractRequest(userUpdateSchema);
+      controller.updateUser;
     }
-  },
-  extractRequest(userUpdateSchema),
-  controller.updateUser
+  }
 );
 customerRouter.get(
   "/api/v1/user/customer/get/:id",
