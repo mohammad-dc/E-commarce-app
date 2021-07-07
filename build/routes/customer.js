@@ -16,7 +16,7 @@ exports.customerRouter.get("/api/v1/user/customer/verify", extractCustomerJWT_1.
 exports.customerRouter.post("/api/v1/user/customer/auth/register", extractRequest_1.extractRequest(user_1.userSignupSchema), customer_1.default.registerUser);
 exports.customerRouter.post("/api/v1/user/customer/auth/login", extractRequest_1.extractRequest(user_1.userLoginSchema), customer_1.default.loginUser);
 exports.customerRouter.put("/api/v1/user/customer/update/:id", extractCustomerJWT_1.default, function (req, res, next) {
-    res.status(400).json({ success: req.body.image ? true : false });
+    res.status(400).json({ success: req.body.length });
     if (req.file) {
         res.status(400).json({ success: true });
     }
