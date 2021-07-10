@@ -37,7 +37,11 @@ const addProduct = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updateProducts = (req: Request, res: Response, next: NextFunction) => {
+const updateProductsWithImage = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let { name, price, description } = req.body;
   let image = `kiwi${req.file.path.split("kiwi")[1]}`;
   let { id } = req.params;
@@ -58,6 +62,40 @@ const updateProducts = (req: Request, res: Response, next: NextFunction) => {
     //     }
     //   });
     // }
+    con.query(query, (error: Error, results: any, fields: any) => {
+      if (error) {
+        return res.status(500).json({
+          success: false,
+          message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+          error,
+        });
+      } else if (results) {
+        return res.status(200).json({
+          success: true,
+          message: "تم تعديل المنتج بنجاح",
+        });
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+      error,
+    });
+  }
+};
+
+const updateProductsWithoutImage = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let { name, price, description } = req.body;
+  let { id } = req.params;
+
+  let query = `UPDATE product SET name="${name}", price=${price}, description="${description}" WHERE ID=${id}`;
+
+  try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({
@@ -283,7 +321,8 @@ const searchDealerProduct = (
 
 export default {
   addProduct,
-  updateProducts,
+  updateProductsWithImage,
+  updateProductsWithoutImage,
   deleteProduct,
   getAllProducts,
   getAllDealerProducts,

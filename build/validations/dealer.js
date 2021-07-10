@@ -28,7 +28,7 @@ exports.dealerSignupSchema = yup.object().shape({
     type: yup.string().required(),
     address: yup.string().required(),
     phone: yup.string().required(),
-    SSN_image: yup.mixed()
+    SSN_image: yup.mixed(),
 });
 exports.dealerLoginSchema = yup.object().shape({
     email: yup.string().email().required(),
@@ -40,5 +40,5 @@ exports.dealerUpdateSchema = yup.object().shape({
     name: yup.string().required(),
     address: yup.string().required(),
     phone: yup.string().required(),
-    image: yup.mixed()
+    image: yup.mixed(),
 });

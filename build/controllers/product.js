@@ -36,7 +36,7 @@ var addProduct = function (req, res, next) {
         });
     }
 };
-var updateProducts = function (req, res, next) {
+var updateProductsWithImage = function (req, res, next) {
     var _a = req.body, name = _a.name, price = _a.price, description = _a.description;
     var image = "kiwi" + req.file.path.split("kiwi")[1];
     var id = req.params.id;
@@ -53,6 +53,35 @@ var updateProducts = function (req, res, next) {
         //     }
         //   });
         // }
+        db_1.con.query(query, function (error, results, fields) {
+            if (error) {
+                return res.status(500).json({
+                    success: false,
+                    message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    error: error,
+                });
+            }
+            else if (results) {
+                return res.status(200).json({
+                    success: true,
+                    message: "تم تعديل المنتج بنجاح",
+                });
+            }
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+            error: error,
+        });
+    }
+};
+var updateProductsWithoutImage = function (req, res, next) {
+    var _a = req.body, name = _a.name, price = _a.price, description = _a.description;
+    var id = req.params.id;
+    var query = "UPDATE product SET name=\"" + name + "\", price=" + price + ", description=\"" + description + "\" WHERE ID=" + id;
+    try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({
@@ -260,7 +289,8 @@ var searchDealerProduct = function (req, res, next) {
 };
 exports.default = {
     addProduct: addProduct,
-    updateProducts: updateProducts,
+    updateProductsWithImage: updateProductsWithImage,
+    updateProductsWithoutImage: updateProductsWithoutImage,
     deleteProduct: deleteProduct,
     getAllProducts: getAllProducts,
     getAllDealerProducts: getAllDealerProducts,

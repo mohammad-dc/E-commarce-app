@@ -26,11 +26,12 @@ exports.ProductAddSchema = yup.object().shape({
     name: yup.string().required(),
     image: yup.mixed(),
     price: yup.number().required(),
-    description: yup.string().required()
+    description: yup.string().required(),
 });
 exports.ProductUpdateSchema = yup.object().shape({
     name: yup.string().required(),
     image: yup.mixed(),
     price: yup.number().required(),
-    description: yup.string().required()
+    description: yup.string().required(),
+    images: yup.mixed(),
 });

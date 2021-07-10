@@ -141,7 +141,11 @@ const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updateUser = (req: Request, res: Response, next: NextFunction) => {
+const updateCustomerWithImage = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let { email, password, name, address, phone } = req.body;
   let image = `kiwi${req.file.path.split("kiwi")[1]}`;
   let { id } = req.params;
@@ -162,6 +166,40 @@ const updateUser = (req: Request, res: Response, next: NextFunction) => {
     //     }
     //   });
     // }
+    con.query(query, (error: Error, results: any, fields: any) => {
+      if (error) {
+        return res.status(500).json({
+          success: false,
+          message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+          error,
+        });
+      } else if (results) {
+        return res.status(200).json({
+          success: true,
+          message: "تم التعديل بنجاح",
+        });
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+      error,
+    });
+  }
+};
+
+const updateCustomerWithoutImage = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let { email, password, name, address, phone } = req.body;
+  let { id } = req.params;
+
+  let query = `UPDATE customer SET email="${email}", password="${password}", name="${name}", address="${address}", phone="${phone}" WHERE ID=${id}`;
+
+  try {
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({
@@ -284,7 +322,8 @@ export default {
   verifyLogin,
   registerUser,
   loginUser,
-  updateUser,
+  updateCustomerWithImage,
+  updateCustomerWithoutImage,
   retrieveUser,
   deleteUser,
   getAllUsers,

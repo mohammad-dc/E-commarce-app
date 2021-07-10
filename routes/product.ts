@@ -18,11 +18,18 @@ productRouter.post(
   controller.addProduct
 );
 productRouter.put(
+  "/api/v1/user/dealer/product/update/with-image/:id",
+  extractDealerJWT,
+  upload.single("image"),
+  extractRequest(ProductUpdateSchema),
+  controller.updateProductsWithImage
+);
+productRouter.put(
   "/api/v1/user/dealer/product/update/:id",
   extractDealerJWT,
   upload.single("image"),
   extractRequest(ProductUpdateSchema),
-  controller.updateProducts
+  controller.updateProductsWithoutImage
 );
 productRouter.delete(
   "/api/v1/user/dealer/product/delete/:id",

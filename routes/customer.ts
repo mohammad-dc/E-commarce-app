@@ -29,18 +29,17 @@ customerRouter.post(
   controller.loginUser
 );
 customerRouter.put(
+  "/api/v1/user/customer/update/with-image/:id",
+  extractCustomerJWT,
+  upload.single("image"),
+  extractRequest(userUpdateSchema),
+  controller.updateCustomerWithImage
+);
+customerRouter.put(
   "/api/v1/user/customer/update/:id",
   extractCustomerJWT,
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (Object.keys(req.body).length === 0) {
-      upload.single("image");
-      extractRequest(userUpdateSchema);
-      controller.updateUser;
-    } else {
-      extractRequest(userUpdateSchema);
-      controller.updateUser;
-    }
-  }
+  extractRequest(userUpdateSchema),
+  controller.updateCustomerWithoutImage
 );
 customerRouter.get(
   "/api/v1/user/customer/get/:id",

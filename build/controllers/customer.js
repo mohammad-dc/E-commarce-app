@@ -141,7 +141,7 @@ var getAllUsers = function (req, res, next) {
         });
     }
 };
-var updateUser = function (req, res, next) {
+var updateCustomerWithImage = function (req, res, next) {
     var _a = req.body, email = _a.email, password = _a.password, name = _a.name, address = _a.address, phone = _a.phone;
     var image = "kiwi" + req.file.path.split("kiwi")[1];
     var id = req.params.id;
@@ -158,6 +158,35 @@ var updateUser = function (req, res, next) {
         //     }
         //   });
         // }
+        db_1.con.query(query, function (error, results, fields) {
+            if (error) {
+                return res.status(500).json({
+                    success: false,
+                    message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    error: error,
+                });
+            }
+            else if (results) {
+                return res.status(200).json({
+                    success: true,
+                    message: "تم التعديل بنجاح",
+                });
+            }
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+            error: error,
+        });
+    }
+};
+var updateCustomerWithoutImage = function (req, res, next) {
+    var _a = req.body, email = _a.email, password = _a.password, name = _a.name, address = _a.address, phone = _a.phone;
+    var id = req.params.id;
+    var query = "UPDATE customer SET email=\"" + email + "\", password=\"" + password + "\", name=\"" + name + "\", address=\"" + address + "\", phone=\"" + phone + "\" WHERE ID=" + id;
+    try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({
@@ -280,7 +309,8 @@ exports.default = {
     verifyLogin: verifyLogin,
     registerUser: registerUser,
     loginUser: loginUser,
-    updateUser: updateUser,
+    updateCustomerWithImage: updateCustomerWithImage,
+    updateCustomerWithoutImage: updateCustomerWithoutImage,
     retrieveUser: retrieveUser,
     deleteUser: deleteUser,
     getAllUsers: getAllUsers,

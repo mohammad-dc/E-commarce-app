@@ -16,17 +16,8 @@ exports.customerRouter = express_1.default.Router();
 exports.customerRouter.get("/api/v1/user/customer/verify", extractCustomerJWT_1.default, customer_1.default.verifyLogin);
 exports.customerRouter.post("/api/v1/user/customer/auth/register", extractRequest_1.extractRequest(user_1.userSignupSchema), customer_1.default.registerUser);
 exports.customerRouter.post("/api/v1/user/customer/auth/login", extractRequest_1.extractRequest(user_1.userLoginSchema), customer_1.default.loginUser);
-exports.customerRouter.put("/api/v1/user/customer/update/:id", extractCustomerJWT_1.default, function (req, res, next) {
-    if (Object.keys(req.body).length === 0) {
-        uploadImage_1.upload.single("image");
-        extractRequest_1.extractRequest(user_1.userUpdateSchema);
-        customer_1.default.updateUser;
-    }
-    else {
-        extractRequest_1.extractRequest(user_1.userUpdateSchema);
-        customer_1.default.updateUser;
-    }
-});
+exports.customerRouter.put("/api/v1/user/customer/update/with-image/:id", extractCustomerJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(user_1.userUpdateSchema), customer_1.default.updateCustomerWithImage);
+exports.customerRouter.put("/api/v1/user/customer/update/:id", extractCustomerJWT_1.default, extractRequest_1.extractRequest(user_1.userUpdateSchema), customer_1.default.updateCustomerWithoutImage);
 exports.customerRouter.get("/api/v1/user/customer/get/:id", extractCustomerJWT_1.default, customer_1.default.retrieveUser);
 // admin
 exports.customerRouter.delete("/api/v1/admin/customer/delete/:id", extractAdminJWT_1.default, customer_1.default.deleteUser);

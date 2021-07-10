@@ -15,7 +15,8 @@ var uploadImage_1 = require("../helpers/uploadImage");
 exports.productRouter = express_1.default.Router();
 // dealer
 exports.productRouter.post("/api/v1/user/dealer/product/create", extractDealerJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(product_2.ProductAddSchema), product_1.default.addProduct);
-exports.productRouter.put("/api/v1/user/dealer/product/update/:id", extractDealerJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(product_2.ProductUpdateSchema), product_1.default.updateProducts);
+exports.productRouter.put("/api/v1/user/dealer/product/update/with-image/:id", extractDealerJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(product_2.ProductUpdateSchema), product_1.default.updateProductsWithImage);
+exports.productRouter.put("/api/v1/user/dealer/product/update/:id", extractDealerJWT_1.default, uploadImage_1.upload.single("image"), extractRequest_1.extractRequest(product_2.ProductUpdateSchema), product_1.default.updateProductsWithoutImage);
 exports.productRouter.delete("/api/v1/user/dealer/product/delete/:id", extractDealerJWT_1.default, product_1.default.deleteProduct);
 exports.productRouter.get("/api/v1/user/dealer/product/get/:dealer_id/:limit?", extractDealerJWT_1.default, product_1.default.getAllDealerProducts);
 exports.productRouter.get("/api/v1/user/dealer/product/search/:dealer_id/:search_name/:limit?", extractDealerJWT_1.default, product_1.default.searchDealerProduct);

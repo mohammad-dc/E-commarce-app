@@ -19,4 +19,5 @@ export const userUpdateSchema = yup.object().shape({
   name: yup.string().required(),
   address: yup.string().required(),
   phone: yup.string().required(),
+  image: yup.mixed(),
 });

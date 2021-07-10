@@ -30,11 +30,17 @@ dealerRouter.post(
   controller.loginDealer
 );
 dealerRouter.put(
-  "/api/v1/user/dealer/update/:id",
+  "/api/v1/user/dealer/update/with-image/:id",
   extractDealerJWT,
   upload.single("image"),
   extractRequest(dealerUpdateSchema),
-  controller.updateDealer
+  controller.updateDealerWithImage
+);
+dealerRouter.put(
+  "/api/v1/user/dealer/update/:id",
+  extractDealerJWT,
+  extractRequest(dealerUpdateSchema),
+  controller.updateDealerWithoutImage
 );
 dealerRouter.get(
   "/api/v1/user/dealer/get/:id",
