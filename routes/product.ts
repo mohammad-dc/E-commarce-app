@@ -27,7 +27,6 @@ productRouter.put(
 productRouter.put(
   "/api/v1/user/dealer/product/update/:id",
   extractDealerJWT,
-  upload.single("image"),
   extractRequest(ProductUpdateSchema),
   controller.updateProductsWithoutImage
 );

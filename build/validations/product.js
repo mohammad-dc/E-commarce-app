@@ -33,5 +33,4 @@ exports.ProductUpdateSchema = yup.object().shape({
     image: yup.mixed(),
     price: yup.number().required(),
     description: yup.string().required(),
-    images: yup.mixed(),
 });
