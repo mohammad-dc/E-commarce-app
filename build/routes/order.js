@@ -13,7 +13,7 @@ var extractRequest_1 = require("../helpers/extractRequest");
 var order_2 = require("../validations/order");
 exports.orderRouter = express_1.default.Router();
 //customer
-exports.orderRouter.post("/api/v1/user/customer/order/create", extractCustomerJWT_1.default, extractRequest_1.extractRequest(order_2.orderSchema), order_1.default.addOrder);
+exports.orderRouter.post("/api/v1/user/customer/order/create", extractCustomerJWT_1.default, extractRequest_1.extractRequest(order_2.orderSchema), order_1.default.createOrder);
 exports.orderRouter.put("/api/v1/user/customer/order/cancel/:order_id", extractCustomerJWT_1.default, order_1.default.cancelOrder);
 exports.orderRouter.get("/api/v1/user/customer/order/get/:customer_id/:month", extractCustomerJWT_1.default, order_1.default.getUserOrders);
 exports.orderRouter.get("/api/v1/user/customer/order/status/get/:month/:customer_id", extractCustomerJWT_1.default, order_1.default.getCustomerOrdersStatus);

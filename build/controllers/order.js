@@ -1,15 +1,154 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var db_1 = require("../config/db");
-var stripe_1 = __importDefault(require("../helpers/stripe"));
-var addOrder = function (req, res, next) {
-    var _a = req.body, payment_method = _a.payment_method, product_id = _a.product_id, customer_id = _a.customer_id, cart_id = _a.cart_id, quantity = _a.quantity, total_price = _a.total_price, address = _a.address, number = _a.number, name = _a.name, exp_month = _a.exp_month, exp_year = _a.exp_year, cvc = _a.cvc;
-    var query = "INSERT INTO orders(product_id, customer_id, quantity, total_price, payment_method, status, transition_price, address) VALUES(" + product_id + ", " + customer_id + ", " + quantity + ", " + total_price + ", " + payment_method + ", '\u0642\u064A\u062F \u0627\u0644\u062A\u0648\u0635\u064A\u0644', 12, '" + address + "')";
-    var query_cart = "DELETE FROM cart WHERE ID=" + cart_id;
-    if (payment_method === 1) {
+// const addOrder = (req: Request, res: Response, next: NextFunction) => {
+//   let {
+//     payment_method,
+//     product_id,
+//     customer_id,
+//     cart_id,
+//     quantity,
+//     total_price,
+//     address,
+//     number,
+//     name,
+//     exp_month,
+//     exp_year,
+//     cvc,
+//   } = req.body;
+//   let query = `INSERT INTO orders(product_id, customer_id, quantity, total_price, payment_method, status, transition_price, address) VALUES(${product_id}, ${customer_id}, ${quantity}, ${total_price}, ${payment_method}, 'قيد التوصيل', 12, '${address}')`;
+//   let query_cart = `DELETE FROM cart WHERE ID=${cart_id}`;
+//   if (payment_method === 1) {
+//     con.query(query, (error: Error, results: any, fields: any) => {
+//       if (error) {
+//         return res.status(500).json({
+//           success: false,
+//           message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+//           error,
+//         });
+//       }
+//       return res.status(201).json({
+//         success: true,
+//         message: "تمت عملية الشراء",
+//       });
+//     });
+//   } else if (payment_method === 2) {
+//     con.query(
+//       `SELECT stripe_id, email FROM customer WHERE ID=${customer_id}`,
+//       (error: Error, customer_results: any, fields: any) => {
+//         if (error) {
+//           return res.status(500).json({
+//             success: false,
+//             message: "حدث خطأ ما يرجى المحاولة لاحقا",
+//             error,
+//           });
+//         } else if (
+//           customer_results.length === 1 &&
+//           customer_results[0].stripe_id
+//         ) {
+//           console.log("1");
+//           Stripe.createToken(
+//             number,
+//             exp_month,
+//             exp_year,
+//             cvc,
+//             (error, token) => {
+//               if (error) {
+//                 return res.status(500).json({
+//                   success: false,
+//                   message: "حدث خطأ ما يرجى المحاولة لاحقا",
+//                   error,
+//                 });
+//               }
+//               if (token) {
+//                 Stripe.addCardToCustomer(
+//                   customer_results[0].stripe_id,
+//                   token.id
+//                 );
+//                 Stripe.chargeCustomer(
+//                   (total_price * 1000).toString(),
+//                   "usd",
+//                   "buy for product",
+//                   customer_results[0].stripe_id
+//                 );
+//               }
+//             }
+//           );
+//         } else if (
+//           customer_results.length === 1 &&
+//           !customer_results[0].stripe_id
+//         ) {
+//           Stripe.createCustomer(
+//             customer_results[0].email,
+//             name,
+//             (error, customer) => {
+//               if (error) {
+//                 return res.status(500).json({
+//                   success: false,
+//                   message: "حدث خطأ ما يرجى المحاولة لاحقا",
+//                   error,
+//                 });
+//               }
+//               con.query(
+//                 `UPDATE customer SET stripe_id='${customer.id}' WHERE ID=${customer_id}`
+//               );
+//               Stripe.createToken(
+//                 number,
+//                 exp_month,
+//                 exp_year,
+//                 cvc,
+//                 (error, token) => {
+//                   if (error) {
+//                     return res.status(500).json({
+//                       success: false,
+//                       message: "حدث خطأ ما يرجى المحاولة لاحقا",
+//                       error,
+//                     });
+//                   }
+//                   if (token) {
+//                     Stripe.addCardToCustomer(customer.id, token.id);
+//                     Stripe.chargeCustomer(
+//                       (total_price * 1000).toString(),
+//                       "usd",
+//                       "buy for product",
+//                       customer.id
+//                     );
+//                   }
+//                 }
+//               );
+//             }
+//           );
+//         }
+//         con.query(query, (error: Error, results: any, fields: any) => {
+//           if (error) {
+//             return res.status(500).json({
+//               success: false,
+//               message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+//             });
+//           }
+//           con.query(query_cart, (error: Error, results: any, fields: any) => {
+//             if (error) {
+//               return res.status(500).json({
+//                 success: false,
+//                 message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+//                 error,
+//               });
+//             }
+//             return res.status(201).json({
+//               success: true,
+//               message: "تمت عملية الشراء",
+//             });
+//           });
+//         });
+//       }
+//     );
+//   }
+// };
+var createOrder = function (req, res, next) {
+    var _a = req.body, payment_method = _a.payment_method, product_id = _a.product_id, customer_id = _a.customer_id, cart_id = _a.cart_id, quantity = _a.quantity, total_price = _a.total_price, address = _a.address, transition_price = _a.transition_price;
+    var query = "INSERT INTO orders(product_id, customer_id, quantity, total_price, payment_method, status, transition_price, address) VALUES(" + product_id + ", " + customer_id + ", " + quantity + ", " + total_price + ", " + payment_method + ", '\u0642\u064A\u062F \u0627\u0644\u062A\u0648\u0635\u064A\u0644', " + transition_price + ", '" + address + "')";
+    var query_cart_delete = "DELETE FROM cart WHERE ID=" + cart_id;
+    try {
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({
@@ -18,85 +157,26 @@ var addOrder = function (req, res, next) {
                     error: error,
                 });
             }
+            db_1.con.query(query_cart_delete, function (error, results, fields) {
+                if (error) {
+                    return res.status(500).json({
+                        success: false,
+                        message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+                        error: error,
+                    });
+                }
+            });
             return res.status(201).json({
                 success: true,
                 message: "تمت عملية الشراء",
             });
         });
     }
-    else if (payment_method === 2) {
-        db_1.con.query("SELECT stripe_id, email FROM customer WHERE ID=" + customer_id, function (error, customer_results, fields) {
-            if (error) {
-                return res.status(500).json({
-                    success: false,
-                    message: "حدث خطأ ما يرجى المحاولة لاحقا",
-                    error: error,
-                });
-            }
-            else if (customer_results.length === 1 &&
-                customer_results[0].stripe_id) {
-                console.log("1");
-                stripe_1.default.createToken(number, exp_month, exp_year, cvc, function (error, token) {
-                    if (error) {
-                        return res.status(500).json({
-                            success: false,
-                            message: "حدث خطأ ما يرجى المحاولة لاحقا",
-                            error: error,
-                        });
-                    }
-                    if (token) {
-                        stripe_1.default.addCardToCustomer(customer_results[0].stripe_id, token.id);
-                        stripe_1.default.chargeCustomer((total_price * 1000).toString(), "usd", "buy for product", customer_results[0].stripe_id);
-                    }
-                });
-            }
-            else if (customer_results.length === 1 &&
-                !customer_results[0].stripe_id) {
-                stripe_1.default.createCustomer(customer_results[0].email, name, function (error, customer) {
-                    if (error) {
-                        return res.status(500).json({
-                            success: false,
-                            message: "حدث خطأ ما يرجى المحاولة لاحقا",
-                            error: error,
-                        });
-                    }
-                    db_1.con.query("UPDATE customer SET stripe_id='" + customer.id + "' WHERE ID=" + customer_id);
-                    stripe_1.default.createToken(number, exp_month, exp_year, cvc, function (error, token) {
-                        if (error) {
-                            return res.status(500).json({
-                                success: false,
-                                message: "حدث خطأ ما يرجى المحاولة لاحقا",
-                                error: error,
-                            });
-                        }
-                        if (token) {
-                            stripe_1.default.addCardToCustomer(customer.id, token.id);
-                            stripe_1.default.chargeCustomer((total_price * 1000).toString(), "usd", "buy for product", customer.id);
-                        }
-                    });
-                });
-            }
-            db_1.con.query(query, function (error, results, fields) {
-                if (error) {
-                    return res.status(500).json({
-                        success: false,
-                        message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
-                    });
-                }
-                db_1.con.query(query_cart, function (error, results, fields) {
-                    if (error) {
-                        return res.status(500).json({
-                            success: false,
-                            message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
-                            error: error,
-                        });
-                    }
-                    return res.status(201).json({
-                        success: true,
-                        message: "تمت عملية الشراء",
-                    });
-                });
-            });
+    catch (e) {
+        return res.status(500).json({
+            success: false,
+            message: "حدث خطأ ما, يرجى المحاولة فيما بعد",
+            error: e,
         });
     }
 };
@@ -382,7 +462,7 @@ var getSumOrdersPrices = function (req, res, next) {
     }
 };
 exports.default = {
-    addOrder: addOrder,
+    createOrder: createOrder,
     updateOrder: updateOrder,
     cancelOrder: cancelOrder,
     getAllOrders: getAllOrders,

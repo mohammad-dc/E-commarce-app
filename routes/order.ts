@@ -13,7 +13,7 @@ orderRouter.post(
   "/api/v1/user/customer/order/create",
   extractCustomerJWT,
   extractRequest(orderSchema),
-  controller.addOrder
+  controller.createOrder
 );
 orderRouter.put(
   "/api/v1/user/customer/order/cancel/:order_id",
