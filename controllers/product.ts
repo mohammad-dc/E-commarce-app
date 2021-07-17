@@ -52,16 +52,16 @@ const updateProductsWithImage = (
   } price=${price}, description="${description}" WHERE ID=${id}`;
 
   try {
-    // if (req.file) {
-    //   con.query(query_image, (error: Error, results: any, fields: any) => {
-    //     if (error) throw error;
-    //     if (results[0].image !== "No image") {
-    //       fs.unlink(`uploads/${results[0].image}`, (error) => {
-    //         if (error) throw error;
-    //       });
-    //     }
-    //   });
-    // }
+    if (req.file) {
+      con.query(query_image, (error: Error, results: any, fields: any) => {
+        if (error) throw error;
+        if (results[0].image !== "No image") {
+          fs.unlink(`uploads/${results[0].image}`, (error) => {
+            if (error) throw error;
+          });
+        }
+      });
+    }
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({
@@ -126,19 +126,19 @@ const deleteProduct = (req: Request, res: Response, next: NextFunction) => {
   let select_image = `SELECT image FROM product WHERE ID=${id}`;
 
   try {
-    // con.query(select_image, (error: Error, image_result: any, fields: any) => {
-    //   if (error) {
-    //     return res.status(500).json({
-    //       success: false,
-    //       message: "حدث خطأ ما يرجى المحاولة فيما بعد",
-    //     });
-    //   }
-    //   if (image_result[0].image !== "No image") {
-    //     fs.unlink(`uploads/${image_result[0].image}`, (error) => {
-    //       if (error) throw error;
-    //     });
-    //   }
-    // });
+    con.query(select_image, (error: Error, image_result: any, fields: any) => {
+      if (error) {
+        return res.status(500).json({
+          success: false,
+          message: "حدث خطأ ما يرجى المحاولة فيما بعد",
+        });
+      }
+      if (image_result[0].image !== "No image") {
+        fs.unlink(`uploads/${image_result[0].image}`, (error) => {
+          if (error) throw error;
+        });
+      }
+    });
     con.query(query, (error: Error, results: any, fields: any) => {
       if (error) {
         return res.status(500).json({

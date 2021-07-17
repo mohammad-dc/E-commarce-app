@@ -1,5 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var fs_1 = __importDefault(require("fs"));
 var db_1 = require("../config/db");
 var addProduct = function (req, res, next) {
     var _a = req.body, dealer_id = _a.dealer_id, name = _a.name, price = _a.price, description = _a.description;
@@ -43,16 +47,18 @@ var updateProductsWithImage = function (req, res, next) {
     var query_image = "SELECT image FROM product WHERE ID=" + id;
     var query = "UPDATE product SET name=\"" + name + "\", " + (req.file ? " image=\"" + image + "\"," : "") + " price=" + price + ", description=\"" + description + "\" WHERE ID=" + id;
     try {
-        // if (req.file) {
-        //   con.query(query_image, (error: Error, results: any, fields: any) => {
-        //     if (error) throw error;
-        //     if (results[0].image !== "No image") {
-        //       fs.unlink(`uploads/${results[0].image}`, (error) => {
-        //         if (error) throw error;
-        //       });
-        //     }
-        //   });
-        // }
+        if (req.file) {
+            db_1.con.query(query_image, function (error, results, fields) {
+                if (error)
+                    throw error;
+                if (results[0].image !== "No image") {
+                    fs_1.default.unlink("uploads/" + results[0].image, function (error) {
+                        if (error)
+                            throw error;
+                    });
+                }
+            });
+        }
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({
@@ -111,19 +117,20 @@ var deleteProduct = function (req, res, next) {
     var query = "DELETE FROM product WHERE ID=" + id;
     var select_image = "SELECT image FROM product WHERE ID=" + id;
     try {
-        // con.query(select_image, (error: Error, image_result: any, fields: any) => {
-        //   if (error) {
-        //     return res.status(500).json({
-        //       success: false,
-        //       message: "حدث خطأ ما يرجى المحاولة فيما بعد",
-        //     });
-        //   }
-        //   if (image_result[0].image !== "No image") {
-        //     fs.unlink(`uploads/${image_result[0].image}`, (error) => {
-        //       if (error) throw error;
-        //     });
-        //   }
-        // });
+        db_1.con.query(select_image, function (error, image_result, fields) {
+            if (error) {
+                return res.status(500).json({
+                    success: false,
+                    message: "حدث خطأ ما يرجى المحاولة فيما بعد",
+                });
+            }
+            if (image_result[0].image !== "No image") {
+                fs_1.default.unlink("uploads/" + image_result[0].image, function (error) {
+                    if (error)
+                        throw error;
+                });
+            }
+        });
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var fs_1 = __importDefault(require("fs"));
 var jwt_decode_1 = __importDefault(require("jwt-decode"));
 var signDealerJWT_1 = __importDefault(require("../helpers/signDealerJWT"));
 var sendSMS_1 = require("../helpers/sendSMS");
@@ -137,16 +138,18 @@ var updateDealerWithImage = function (req, res, next) {
     var query_image = "SELECT image FROM dealer WHERE ID=" + id;
     var query = "UPDATE dealer SET email=\"" + email + "\", password=\"" + password + "\", name=\"" + name + "\", address=\"" + address + "\", phone=\"" + phone + "\" " + (req.file ? ", image=\"" + image + "\"" : "") + " WHERE ID=" + id;
     try {
-        // if (req.file) {
-        //   con.query(query_image, (error: Error, results: any, fields: any) => {
-        //     if (error) throw error;
-        //     if (results[0].image !== "No image") {
-        //       fs.unlink(`uploads/${results[0].image}`, (error) => {
-        //         if (error) throw error;
-        //       });
-        //     }
-        //   });
-        // }
+        if (req.file) {
+            db_1.con.query(query_image, function (error, results, fields) {
+                if (error)
+                    throw error;
+                if (results[0].image !== "No image") {
+                    fs_1.default.unlink("uploads/" + results[0].image, function (error) {
+                        if (error)
+                            throw error;
+                    });
+                }
+            });
+        }
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({
@@ -262,24 +265,27 @@ var deleteDealer = function (req, res, next) {
     var query = "DELETE FROM dealer WHERE ID=" + id;
     var query_image = "SELECT image, SSN_image FROM dealer WHERE ID=" + id;
     try {
-        // con.query(query_image, (error: Error, results: any) => {
-        //   if (error) {
-        //     return res.status(500).json({
-        //       success: false,
-        //       message: "حدث خطأ ما, يرجى المحاولة لاحقا",
-        //       error,
-        //     });
-        //   } else if (results) {
-        //     if (results[0].image !== "No image") {
-        //       fs.unlink(`uploads/${results[0].image}`, (error) => {
-        //         if (error) throw error;
-        //       });
-        //       fs.unlink(`uploads/${results[0].SSN_image}`, (error) => {
-        //         if (error) throw error;
-        //       });
-        //     }
-        //   }
-        // });
+        db_1.con.query(query_image, function (error, results) {
+            if (error) {
+                return res.status(500).json({
+                    success: false,
+                    message: "حدث خطأ ما, يرجى المحاولة لاحقا",
+                    error: error,
+                });
+            }
+            else if (results) {
+                if (results[0].image !== "No image") {
+                    fs_1.default.unlink("uploads/" + results[0].image, function (error) {
+                        if (error)
+                            throw error;
+                    });
+                    fs_1.default.unlink("uploads/" + results[0].SSN_image, function (error) {
+                        if (error)
+                            throw error;
+                    });
+                }
+            }
+        });
         db_1.con.query(query, function (error, results, fields) {
             if (error) {
                 return res.status(500).json({
